@@ -1,0 +1,22 @@
+-- Measure: SVG - Positions Treemap
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 06-svg-visuals
+
+-- strip treemap: width = market value, colour = return on cost
+VAR _p = ADDCOLUMNS ( VALUES ( gold_fact_positions[symbol] ), "@mv", [Position Market Value], "@r", [Position Return %] )
+VAR _tot = SUMX ( _p, [@mv] )
+VAR _rk = ADDCOLUMNS ( _p, "@i", RANKX ( _p, [@mv], , DESC, DENSE ) )
+VAR _x = ADDCOLUMNS ( _rk, "@x0", VAR i = [@i] RETURN SUMX ( FILTER ( _rk, [@i] < i ), [@mv] ) / _tot * 900 )
+VAR _tiles = CONCATENATEX ( _x,
+    VAR w = [@mv] / _tot * 900
+    VAR c = IF ( [@r] >= 0.01, "#2E9E44", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#E0574C" ) ) )
+    VAR tc = IF ( ABS ( [@r] ) >= 0.01, "#fff", "#0F1712" )
+    RETURN
+        "<rect x='" & FORMAT ( [@x0] + 1, "0.0", "en-US" ) & "' y='0' width='" & FORMAT ( MAX ( w - 2, 1 ), "0.0", "en-US" ) & "' height='120' rx='6' fill='" & c & "'/>"
+        & IF ( w > 40,
+            "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='18' font-size='12' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
+            & "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='110' font-size='12' font-weight='700' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
+    "", [@i], ASC )
+VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI'>" & _tiles & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )

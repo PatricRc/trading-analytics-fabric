@@ -1,0 +1,8 @@
+-- Measure: Strategy Top-Bottom 4 Filter
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+-- Format string: 0
+
+-- visual-level filter: is 1 for the 4 best and 4 worst strategies
+IF ( [Strategy Rank Best] <= 4 || [Strategy Rank Worst] <= 4, 1, 0 )

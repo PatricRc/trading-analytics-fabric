@@ -1,0 +1,25 @@
+-- Measure: SVG - Crypto vs Equity Weekly
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 06-svg-visuals
+
+-- cumulative P&L by week for crypto (green) and equity (red)
+VAR _wk = FILTER ( ALLSELECTED ( gold_dim_date[WeekStart] ), NOT ISBLANK ( [Net P&L] ) )
+VAR _t = ADDCOLUMNS ( _wk,
+    "@c", VAR w = gold_dim_date[WeekStart] RETURN CALCULATE ( [Crypto P&L], FILTER ( ALLSELECTED ( gold_dim_date ), gold_dim_date[WeekStart] <= w ) ),
+    "@e", VAR w = gold_dim_date[WeekStart] RETURN CALCULATE ( [Equity P&L], FILTER ( ALLSELECTED ( gold_dim_date ), gold_dim_date[WeekStart] <= w ) ) )
+VAR _n = COUNTROWS ( _t )
+VAR _hi = MAX ( 1, MAX ( MAXX ( _t, [@c] ), MAXX ( _t, [@e] ) ) )
+VAR _lo = MIN ( 0, MIN ( MINX ( _t, [@c] ), MINX ( _t, [@e] ) ) )
+VAR _r = ADDCOLUMNS ( _t, "@i", RANKX ( _t, gold_dim_date[WeekStart], , ASC ) )
+VAR _lc = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@c] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
+VAR _le = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@e] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI'>"
+        & "<polyline points='" & _lc & "' fill='none' stroke='#4ED15A' stroke-width='2.5'/>"
+        & "<polyline points='" & _le & "' fill='none' stroke='#E0574C' stroke-width='2.5'/>"
+        & "<text x='720' y='20' font-size='13' font-weight='700' fill='#4ED15A'>Crypto " & FORMAT ( [Crypto P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='720' y='40' font-size='13' font-weight='700' fill='#E0574C'>Equity " & FORMAT ( [Equity P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='720' y='60' font-size='13' font-weight='700' fill='#F2B5AE'>Options " & FORMAT ( [Options P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )

@@ -1,0 +1,7 @@
+-- Measure: Last Trade Date
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 01-base
+-- Format string: d mmm yyyy
+
+CALCULATE ( MAX ( gold_fact_trades[Date] ), ALLSELECTED ( gold_dim_date ) )

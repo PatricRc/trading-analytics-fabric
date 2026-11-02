@@ -1,0 +1,14 @@
+-- Measure: Card - Lost Past -1R HTML
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 05-html-cards
+
+VAR _val = FORMAT ( [Lost Past -1R P&L] / 1000, "+$0.0;-$0.0", "en-US" ) & "K"
+VAR _sub = FORMAT ( [Lost Past -1R Trades], "#,0" ) & " trades slipped their stop"
+VAR _color = "#E0574C"
+RETURN
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+        & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Lost past −1R</div>"
+        & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+        & "</div>" 

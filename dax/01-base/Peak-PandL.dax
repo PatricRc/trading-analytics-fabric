@@ -1,0 +1,7 @@
+-- Measure: Peak P&L
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 01-base
+-- Format string: $#,0;-$#,0;$0
+
+MAXX ( FILTER ( ALLSELECTED ( gold_dim_date[Date] ), NOT ISBLANK ( [Net P&L] ) ), [Cumulative P&L] )

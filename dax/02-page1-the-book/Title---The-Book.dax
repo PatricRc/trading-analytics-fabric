@@ -1,0 +1,10 @@
+-- Measure: Title - The Book
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 02-page1-the-book
+
+-- conclusion title (style guide: the title states the finding)
+VAR _net = [Net P&L]
+RETURN
+    "From " & FORMAT ( [Gross Wins] / 1000, "$0.0", "en-US" ) & "K" & " won to "
+        & FORMAT ( ABS ( _net ) / 1000, "$0.0", "en-US" ) & "K" & IF ( _net < 0, " lost", " kept" )

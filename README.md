@@ -26,6 +26,15 @@ Alpaca API / Binance ──► nb_bronze_api_pulls (Fabric notebook)
 
 ## Repository layout
 ```
+dax/             116 DAX measures, one .dax file each, by page
+  01-base/              core P&L, win rate, profit factor, drawdown
+  02-page1-the-book/    page 1 measures
+  03-page2-the-edge/    page 2 measures
+  04-page3-the-desk/    page 3 measures
+  05-html-cards/        KPI cards + insight panels (HTML Content visual)
+  06-svg-visuals/       charts drawn in DAX as SVG (Image URL)
+  _all-measures.dax     one script to load everything via DAX query view
+powerbi/         trading-theme.json (report theme in the dashboard colours)
 dashboard/
   html/          dashboard-replica.html (exact copy of the Paper design)
                  dashboard-guide-final.html (with the style guide applied)
@@ -44,14 +53,18 @@ Microsoft Fabric (Lakehouse, Notebooks, SQL endpoint, Dataflow Gen2, Direct Lake
 ## Notable engineering fix
 Delta writes to `/lakehouse/default/Tables/` failed because the FUSE mount cannot do the atomic rename Delta needs. Writing through the OneLake `abfss://` endpoint with a storage bearer token fixed it. See [docs/delta-write-fix.md](docs/delta-write-fix.md).
 
-## Rebuild the dashboard
+## Build the Power BI report
+Follow [docs/report-build-guide.md](docs/report-build-guide.md): relationships, loading `dax/_all-measures.dax`, and which measure goes in each visual on each page.
+Regenerate the DAX with `python scripts/build_dax.py .`
+
+## Rebuild the HTML dashboard
 ```bash
 python scripts/build_dash.py dashboard/html replica
 python scripts/build_dash.py dashboard/html guide
 ```
 
 ## Roadmap
-- Semantic model relationships and DAX measures
+- Publish the Power BI report (.pbix / PBIP)
 - Dataflow Gen2 transforms in Power Query
 - Scheduled pipeline instead of manual Run all
 - Backfill 14 crypto pairs from Binance

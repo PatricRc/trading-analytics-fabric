@@ -1,0 +1,22 @@
+{
+  "name": "Trading Analytics · Forest",
+  "dataColors": ["#2E9E44", "#E0574C", "#4ED15A", "#F2B5AE", "#0F1712", "#A9E5AE", "#6A746C", "#BFC8C0"],
+  "good": "#2E9E44", "bad": "#E0574C", "neutral": "#6A746C",
+  "maximum": "#2E9E44", "center": "#E3E8E3", "minimum": "#E0574C",
+  "background": "#FFFFFF", "foreground": "#0F1712", "tableAccent": "#2E9E44",
+  "textClasses": {
+    "title":  { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#0F1712" },
+    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#0F1712" },
+    "label":  { "fontFace": "Segoe UI", "fontSize": 10, "color": "#6A746C" },
+    "callout":{ "fontFace": "Segoe UI Bold", "fontSize": 28, "color": "#0F1712" }
+  },
+  "visualStyles": {
+    "*": { "*": {
+      "background": [{ "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
+      "border": [{ "show": false }],
+      "visualHeader": [{ "show": false }],
+      "dropShadow": [{ "show": false }]
+    } },
+    "page": { "*": { "background": [{ "color": { "solid": { "color": "#EEF2EE" } }, "transparency": 0 }] } }
+  }
+}

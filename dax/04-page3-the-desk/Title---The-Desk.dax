@@ -1,0 +1,7 @@
+-- Measure: Title - The Desk
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+
+FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K" & " sitting in cash · "
+    & FORMAT ( [Capital Deployed %], "0%" ) & " of equity deployed" 

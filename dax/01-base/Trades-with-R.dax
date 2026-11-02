@@ -1,0 +1,7 @@
+-- Measure: Trades with R
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 01-base
+-- Format string: #,0
+
+COUNT ( gold_fact_trades[r] )

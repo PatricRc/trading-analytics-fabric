@@ -1,0 +1,44 @@
+-- Measure: SVG - Order Flow Sankey
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 06-svg-visuals
+
+-- all orders → side → outcome; ribbon width = order count
+VAR _o = ADDCOLUMNS ( ALLSELECTED ( gold_fact_orders[side], gold_fact_orders[status] ), "@n", CALCULATE ( [Orders] ) )
+VAR _f = ADDCOLUMNS ( FILTER ( _o, [@n] > 0 ),
+    "@s", SWITCH ( LOWER ( gold_fact_orders[side] ), "buy", 1, "sell", 2, 3 ),
+    "@g", SWITCH ( LOWER ( gold_fact_orders[status] ), "filled", 1, "canceled", 2, "expired", 3, 4 ) )
+VAR _flows = GROUPBY ( _f, [@s], [@g], "@n", SUMX ( CURRENTGROUP (), [@n] ) )
+VAR _tot = SUMX ( _flows, [@n] )
+VAR _k = 180 / _tot          -- px per order
+VAR _gap = 10
+VAR _so = ADDCOLUMNS ( _flows,
+    "@sy", VAR s = [@s] VAR g = [@g]
+           RETURN 10 + ( s - 1 ) * _gap + SUMX ( FILTER ( _flows, [@s] < s || ( [@s] = s && [@g] < g ) ), [@n] ) * _k,
+    "@ty", VAR s = [@s] VAR g = [@g]
+           RETURN 10 + ( g - 1 ) * _gap + SUMX ( FILTER ( _flows, [@g] < g || ( [@g] = g && [@s] < s ) ), [@n] ) * _k )
+VAR _ribbons = CONCATENATEX ( _so,
+    VAR h = [@n] * _k
+    VAR c = SWITCH ( [@g], 1, "#2E9E44", 2, "#BFC8C0", 3, "#E0574C", "#F2B5AE" )
+    RETURN "<path d='M300," & FORMAT ( [@sy], "0.0", "en-US" ) & " C450," & FORMAT ( [@sy], "0.0", "en-US" ) & " 450," & FORMAT ( [@ty], "0.0", "en-US" ) & " 600," & FORMAT ( [@ty], "0.0", "en-US" )
+        & " L600," & FORMAT ( [@ty] + h, "0.0", "en-US" ) & " C450," & FORMAT ( [@ty] + h, "0.0", "en-US" ) & " 450," & FORMAT ( [@sy] + h, "0.0", "en-US" ) & " 300," & FORMAT ( [@sy] + h, "0.0", "en-US" ) & " Z' fill='" & c & "' fill-opacity='.45'/>",
+    "" )
+VAR _nodes =
+    CONCATENATEX ( GROUPBY ( _so, [@s] ),
+        VAR s = [@s] VAR n = SUMX ( FILTER ( _flows, [@s] = s ), [@n] )
+        VAR y = MINX ( FILTER ( _so, [@s] = s ), [@sy] )
+        RETURN "<rect x='292' y='" & FORMAT ( y, "0.0", "en-US" ) & "' width='8' height='" & FORMAT ( n * _k, "0.0", "en-US" ) & "' fill='#0F1712'/>"
+            & "<text x='286' y='" & FORMAT ( y + n * _k / 2 + 4, "0.0", "en-US" ) & "' font-size='11' text-anchor='end' fill='#0F1712'>" & SWITCH ( s, 1, "Buy", 2, "Sell", "Other" ) & " " & n & "</text>", "" )
+    & CONCATENATEX ( GROUPBY ( _so, [@g] ),
+        VAR g = [@g] VAR n = SUMX ( FILTER ( _flows, [@g] = g ), [@n] )
+        VAR y = MINX ( FILTER ( _so, [@g] = g ), [@ty] )
+        RETURN "<rect x='600' y='" & FORMAT ( y, "0.0", "en-US" ) & "' width='8' height='" & FORMAT ( n * _k, "0.0", "en-US" ) & "' fill='" & SWITCH ( g, 1, "#2E9E44", 2, "#9AA39C", 3, "#E0574C", "#F2B5AE" ) & "'/>"
+            & "<text x='616' y='" & FORMAT ( y + n * _k / 2 + 4, "0.0", "en-US" ) & "' font-size='11' fill='#0F1712'>" & SWITCH ( g, 1, "Filled", 2, "Canceled", 3, "Expired", "Working" ) & " " & n
+            & " (" & FORMAT ( n / _tot, "0%" ) & ")</text>", "" )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 240' font-family='Plus Jakarta Sans,Segoe UI'>"
+        & "<rect x='150' y='10' width='8' height='" & FORMAT ( 180 + 2 * _gap, "0", "en-US" ) & "' fill='#0F1712'/>"
+        & "<text x='140' y='110' font-size='18' font-weight='800' text-anchor='end' fill='#0F1712'>" & _tot & "</text>"
+        & "<text x='140' y='126' font-size='10' text-anchor='end' fill='#6A746C'>orders</text>"
+        & _ribbons & _nodes & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )

@@ -1,0 +1,12 @@
+-- Measure: Cumulative P&L
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 01-base
+-- Format string: $#,0;-$#,0;$0
+
+VAR _d = MAX ( gold_dim_date[Date] )
+RETURN
+    CALCULATE (
+        [Net P&L],
+        FILTER ( ALLSELECTED ( gold_dim_date[Date] ), gold_dim_date[Date] <= _d )
+    )

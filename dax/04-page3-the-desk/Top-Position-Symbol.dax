@@ -1,0 +1,6 @@
+-- Measure: Top Position Symbol
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+
+MAXX ( TOPN ( 1, VALUES ( gold_fact_positions[symbol] ), [Position Market Value], DESC ), gold_fact_positions[symbol] )

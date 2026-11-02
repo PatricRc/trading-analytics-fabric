@@ -1,0 +1,7 @@
+-- Measure: Profit Factor
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 01-base
+-- Format string: 0.00
+
+DIVIDE ( [Gross Wins], ABS ( [Gross Losses] ) )

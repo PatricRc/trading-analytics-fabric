@@ -1,0 +1,8 @@
+-- Measure: Account Equity
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 02-page1-the-book
+-- Format string: $#,0
+
+VAR _d = MAX ( gold_fact_account[Date] )
+RETURN CALCULATE ( SUM ( gold_fact_account[equity] ), gold_fact_account[Date] = _d, REMOVEFILTERS ( gold_dim_date ) )

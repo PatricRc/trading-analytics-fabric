@@ -1,0 +1,14 @@
+-- Measure: Card - Profit Factor HTML
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 05-html-cards
+
+VAR _val = FORMAT ( [Profit Factor], "0.00", "en-US" ) & "<span style='font-size:15px;color:#6A746C'>/1.00</span>"
+VAR _sub = "only crypto clears 1.0 (" & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & ")"
+VAR _color = "#0F1712"
+RETURN
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+        & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Profit factor</div>"
+        & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Wins] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+        & "</div>" 

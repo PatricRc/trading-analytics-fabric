@@ -1,0 +1,7 @@
+-- Measure: Take Profit Avg R
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+-- Format string: 0.00"R"
+
+CALCULATE ( [Avg R], KEEPFILTERS ( gold_fact_trades[exit_type] = "take_profit" ) )

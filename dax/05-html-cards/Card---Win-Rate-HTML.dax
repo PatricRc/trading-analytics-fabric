@@ -1,0 +1,14 @@
+-- Measure: Card - Win Rate HTML
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 05-html-cards
+
+VAR _val = FORMAT ( [Win Rate], "0.0%", "en-US" )
+VAR _sub = FORMAT ( [Wins], "#,0" ) & " won · " & FORMAT ( [Losses], "#,0" ) & " lost"
+VAR _color = "#0F1712"
+RETURN
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+        & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Win rate</div>"
+        & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Losses] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+        & "</div>" 

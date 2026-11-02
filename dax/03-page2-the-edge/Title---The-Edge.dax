@@ -1,0 +1,7 @@
+-- Measure: Title - The Edge
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+
+"Expectancy " & FORMAT ( [Expectancy], "$#,0.00;-$#,0.00", "en-US" ) & " per trade · "
+    & IF ( [Short P&L] > [Long P&L], "shorts carry the book", "longs carry the book" )

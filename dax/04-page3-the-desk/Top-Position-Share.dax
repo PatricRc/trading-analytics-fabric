@@ -1,0 +1,10 @@
+-- Measure: Top Position Share
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+-- Format string: 0%
+
+DIVIDE (
+    MAXX ( VALUES ( gold_fact_positions[symbol] ), [Position Market Value] ),
+    [Position Market Value]
+)

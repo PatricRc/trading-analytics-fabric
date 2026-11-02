@@ -1,0 +1,7 @@
+-- Measure: Stop Exit Recovery %
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+-- Format string: 0%
+
+CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) )

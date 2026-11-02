@@ -1,0 +1,7 @@
+-- Measure: Positions Up
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+-- Format string: #,0
+
+CALCULATE ( [Open Positions], KEEPFILTERS ( gold_fact_positions[unrealized_pl] > 0 ) )

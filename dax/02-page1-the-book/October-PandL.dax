@@ -1,0 +1,7 @@
+-- Measure: October P&L
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 02-page1-the-book
+-- Format string: $#,0;-$#,0;$0
+
+CALCULATE ( [Net P&L], KEEPFILTERS ( gold_dim_date[Month] = 10 ) )

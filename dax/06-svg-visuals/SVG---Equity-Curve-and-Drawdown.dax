@@ -1,0 +1,34 @@
+-- Measure: SVG - Equity Curve & Drawdown
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 06-svg-visuals
+
+-- line = cumulative closed P&L; red band underneath = drawdown from the running peak
+VAR _W = 900  VAR _H = 220  VAR _L = 44  VAR _R = 8
+VAR _t = ADDCOLUMNS ( FILTER ( ALLSELECTED ( gold_dim_date[Date] ), NOT ISBLANK ( [Net P&L] ) ), "@cum", [Cumulative P&L], "@dd", [Drawdown] )
+VAR _d0 = MINX ( _t, gold_dim_date[Date] )  VAR _d1 = MAXX ( _t, gold_dim_date[Date] )
+VAR _hi = MAX ( 0, MAXX ( _t, [@cum] ) )  VAR _lo = MIN ( 0, MINX ( _t, [@cum] ) )
+VAR _ddlo = MIN ( -1, MINX ( _t, [@dd] ) )
+VAR _span = MAX ( 1, INT ( _d1 - _d0 ) )
+VAR _pts = ADDCOLUMNS ( _t,
+    "@x", _L + INT ( gold_dim_date[Date] - _d0 ) / _span * ( _W - _L - _R ),
+    "@y", 10 + ( _hi - [@cum] ) / MAX ( 1, _hi - _lo ) * 120,
+    "@uy", 150 + [@dd] / _ddlo * 50 )
+VAR _line = CONCATENATEX ( _pts, FORMAT ( [@x], "0.0", "en-US" ) & "," & FORMAT ( [@y], "0.0", "en-US" ), " ", gold_dim_date[Date], ASC )
+VAR _under = CONCATENATEX ( _pts, FORMAT ( [@x], "0.0", "en-US" ) & "," & FORMAT ( [@uy], "0.0", "en-US" ), " ", gold_dim_date[Date], ASC )
+VAR _y0 = 10 + _hi / MAX ( 1, _hi - _lo ) * 120
+VAR _last = TOPN ( 1, _pts, gold_dim_date[Date], DESC )
+VAR _lx = MAXX ( _last, [@x] )  VAR _ly = MAXX ( _last, [@y] )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI' >"
+        & "<line x1='44' x2='892' y1='" & FORMAT ( _y0, "0.0", "en-US" ) & "' y2='" & FORMAT ( _y0, "0.0", "en-US" ) & "' stroke='#E3E8E3'/>"
+        & "<text x='0' y='" & FORMAT ( _y0 + 4, "0.0", "en-US" ) & "' font-size='10' fill='#6A746C'>$0</text>"
+        & "<polyline points='" & _line & "' fill='none' stroke='#2E9E44' stroke-width='2' stroke-linejoin='round'/>"
+        & "<line x1='44' x2='892' y1='150' y2='150' stroke='#E3E8E3'/>"
+        & "<text x='0' y='162' font-size='10' fill='#6A746C'>DD</text>"
+        & "<polygon points='44,150 " & _under & " " & FORMAT ( _lx, "0.0", "en-US" ) & ",150' fill='#E0574C' fill-opacity='.22' stroke='#E0574C' stroke-width='1.2'/>"
+        & "<circle cx='" & FORMAT ( _lx, "0.0", "en-US" ) & "' cy='" & FORMAT ( _ly, "0.0", "en-US" ) & "' r='5' fill='#2E9E44'/>"
+        & "<text x='" & FORMAT ( _lx - 8, "0.0", "en-US" ) & "' y='" & FORMAT ( _ly - 10, "0.0", "en-US" ) & "' font-size='12' font-weight='700' text-anchor='end' fill='#0F1712'>" & FORMAT ( [Net P&L], "$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='300' y='214' font-size='10' font-weight='600' fill='#E0574C'>Max drawdown " & FORMAT ( _ddlo, "$#,0;-$#,0", "en-US" ) & "</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )

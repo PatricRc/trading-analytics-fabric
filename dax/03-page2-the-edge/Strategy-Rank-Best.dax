@@ -1,0 +1,11 @@
+-- Measure: Strategy Rank Best
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+-- Format string: 0
+
+-- 1 = best strategy by net P&L within the current selection
+IF (
+    ISINSCOPE ( gold_fact_trades[strategy] ),
+    RANKX ( ALLSELECTED ( gold_fact_trades[strategy] ), [Net P&L], , DESC, DENSE )
+)

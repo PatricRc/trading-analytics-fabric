@@ -1,0 +1,7 @@
+-- Measure: Subtitle - The Book
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 02-page1-the-book
+
+"Is the account growing? · " & FORMAT ( [Trades], "#,0" ) & " closed trades · "
+    & FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " – " & FORMAT ( [Last Trade Date], "d mmm yyyy", "en-US" )

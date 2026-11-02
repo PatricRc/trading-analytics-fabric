@@ -1,0 +1,7 @@
+-- Measure: Position Return %
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+-- Format string: +0.00%;-0.00%
+
+DIVIDE ( [Unrealized P&L], SUM ( gold_fact_positions[cost_basis] ) )

@@ -1,0 +1,7 @@
+-- Measure: Long P&L
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 03-page2-the-edge
+-- Format string: $#,0;-$#,0;$0
+
+CALCULATE ( [Net P&L], KEEPFILTERS ( gold_fact_trades[side] = "long" ) )

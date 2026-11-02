@@ -1,0 +1,6 @@
+-- Measure: Panel - Trailing Stops HTML
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 05-html-cards
+
+"<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:22px'>" & "<div style='font-size:44px;font-weight:800;letter-spacing:-.03em;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:15px'>" & "Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R" & "</span></span></div>" & "</div>"

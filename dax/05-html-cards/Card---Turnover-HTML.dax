@@ -1,0 +1,14 @@
+-- Measure: Card - Turnover HTML
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 05-html-cards
+
+VAR _val = FORMAT ( [Turnover] / 1000000, "$0.0", "en-US" ) & "M"
+VAR _sub = FORMAT ( [Turnover x Equity], "0", "en-US" ) & "× equity"
+VAR _color = "#0F1712"
+RETURN
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+        & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Turnover</div>"
+        & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+        & "</div>" 

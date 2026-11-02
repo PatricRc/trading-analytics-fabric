@@ -1,0 +1,7 @@
+-- Measure: Crypto Pairs Tracked
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+-- Format string: #,0
+
+30  -- universe size from the bot config; 14 pairs are not listed on Alpaca

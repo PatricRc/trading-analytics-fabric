@@ -1,0 +1,8 @@
+-- Measure: Buying Power
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 04-page3-the-desk
+-- Format string: $#,0
+
+VAR _d = MAX ( gold_fact_account[Date] )
+RETURN CALCULATE ( SUM ( gold_fact_account[buying_power] ), gold_fact_account[Date] = _d, REMOVEFILTERS ( gold_dim_date ) )
