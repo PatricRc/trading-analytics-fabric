@@ -1,0 +1,14 @@
+-- Measure: SVG - Card Waterfall
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 07-page1-layout
+
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & [Title - The Book] & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "P&amp;L waterfall · stop exits alone erase more than half of all gains" & "</text>"
+        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#FDE7E4'/><text x='771.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#C2453A'>" & "Stops = " & FORMAT ( [Stop Share of Gains], "0%" ) & " of gains" & "</text>"
+        & "<svg x='28' y='100' width='828' height='230'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - P&L Waterfall], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

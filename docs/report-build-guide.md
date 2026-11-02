@@ -14,7 +14,9 @@ How to rebuild the three dashboard pages (`dashboard/html/dashboard-replica.html
 
 Mark `gold_dim_date` as the date table.
 
-**Load the measures:** open Power BI Desktop (live-edit the model) → **DAX query view** → paste `dax/_all-measures.dax` → **Run** → **Update model with changes**. Then put each measure in the display folder named in its header (`01-base`, `02-page1-the-book`, …).
+**Direction matters:** every date relationship must be fact (*) → `gold_dim_date` (1). If it is the other way round, month/week filters never reach the facts (symptoms: flat equity curve, September and October both showing the full-period total).
+
+**Load the measures:** copy the script with a UTF-8 clipboard (`LC_ALL=en_US.UTF-8 pbcopy < dax/_all-measures.dax` on macOS, otherwise `·` and `–` turn into `¬∑`), then open Power BI Desktop (live-edit the model) → **DAX query view** → paste `dax/_all-measures.dax` → **Run** → **Update model with changes**. Then put each measure in the display folder named in its header (`01-base`, `02-page1-the-book`, …).
 Set **Data category = Image URL** on every `SVG - …` measure.
 
 **Theme:** View → Themes → Browse → `powerbi/trading-theme.json`.
@@ -29,7 +31,23 @@ Set **Data category = Image URL** on every `SVG - …` measure.
 | `SVG - …` | **Image** visual (*Image URL* = measure), the new **Card** visual image slot, or a single-cell table |
 | plain measures | native visuals (cards, bar, line, table) |
 
-## 3 · Page 1 · The Book — *Is the account growing?*
+## 3 · Page 1 · The Book — *Is the account growing?* (built)
+
+![Page 1 in Power BI](../dashboard/screenshots/powerbi-page1-the-book.jpg)
+
+Page 1 is built in the `TradingDashboard` report on a 1920×1080 grid. Charts, header and rail are **Image** visuals (Image source = *Select from data*, fit = *Fit*) bound to the framed SVG measures in `dax/07-page1-layout`. KPI cards and the drawdown panel are **HTML Content** visuals with visual background off and padding 0.
+
+| Visual | Measure | x | y | w | h |
+|---|---|---|---|---|---|
+| Rail | `SVG - Rail` | 0 | 0 | 72 | 1080 |
+| Header | `SVG - Header The Book` | 96 | 24 | 1792 | 96 |
+| KPI 1–4 | `Card - Account Equity / Net Closed P&L / Win Rate / Profit Factor HTML` | 96 / 550 / 1004 / 1458 | 140 | 430 | 170 |
+| Equity curve | `SVG - Card Equity Curve` | 96 | 334 | 884 | 340 |
+| Drawdown panel | `Panel - Max Drawdown HTML` | 1004 | 334 | 884 | 340 |
+| Waterfall | `SVG - Card Waterfall` | 96 | 698 | 884 | 358 |
+| Crypto vs equity | `SVG - Card Crypto` | 1004 | 698 | 884 | 358 |
+
+Original slot plan:
 
 | Slot (dashboard) | Visual | Measures |
 |---|---|---|

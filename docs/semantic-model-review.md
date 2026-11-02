@@ -80,3 +80,10 @@ The model is in Viewing mode. To apply relationship and column changes, switch t
 - Crypto `net` vs `gross − fees` gap: silver notebook fix.
 - Hiding foreign-key columns and sorting `MonthName`/`Weekday`: cosmetic, not done.
 - Measure format strings are not on the model yet. Set them in the Properties pane for each measure (the `.dax` headers list the intended format).
+
+## Applied 2 Nov 2026, second pass
+- **Relationship direction fixed.** Four date relationships (account, orders, positions, trades) had `gold_dim_date` on the *many* side, so date filters never reached the facts. All are now fact (*) → `gold_dim_date` (1), single direction. The inactive `gold_fact_positions` → `gold_dim_symbol` relationship was also reversed and is fixed (still inactive).
+- **Measures moved** into a `_measures` table (by the model owner) with display folders 01 Core KPIs … 99 Helpers.
+- **Encoding fixed.** 14 measures had `·`, `–`, `−`, `×` garbled by a non-UTF-8 clipboard; re-applied.
+- **SVG data URIs** now encode `%` as `%25` before `#` → `%23`; a raw `%` (for example "53% win") broke every `#` colour in the image.
+- **New layout measures** for page 1 (`dax/07-page1-layout`): framed equity, waterfall and crypto cards, header, rail.

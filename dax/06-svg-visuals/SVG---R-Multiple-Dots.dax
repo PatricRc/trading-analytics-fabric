@@ -20,6 +20,6 @@ VAR _cols = CONCATENATEX ( _cnt,
         & "<text x='" & cx & "' y='" & ( 168 - INT ( MAX ( n - 1, 0 ) / 4 ) * 10 - 10 ) & "' font-size='10' font-weight='700' text-anchor='middle' fill='#0F1712'>" & n & "</text>"
         & "<text x='" & cx & "' y='202' font-size='10' text-anchor='middle' fill='#6A746C'>" & FORMAT ( b, "+0.0;-0.0;0", "en-US" ) & "R" & "</text>",
     "", [@bin], ASC )
-VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI'>"
+VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<line x1='0' x2='900' y1='188' y2='188' stroke='#E3E8E3'/>" & _cols & "</svg>"
-RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

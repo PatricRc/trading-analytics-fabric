@@ -18,5 +18,5 @@ VAR _tiles = CONCATENATEX ( _x,
             "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='18' font-size='12' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
             & "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='110' font-size='12' font-weight='700' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
     "", [@i], ASC )
-VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI'>" & _tiles & "</svg>"
-RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>" & _tiles & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

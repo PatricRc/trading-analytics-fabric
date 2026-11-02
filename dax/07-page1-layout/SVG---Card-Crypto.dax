@@ -1,0 +1,28 @@
+-- Measure: SVG - Card Crypto
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 07-page1-layout
+
+-- dark card: weekly cumulative lines + one bar per asset class
+VAR _c = [Crypto P&L]  VAR _e = [Equity P&L]  VAR _o = [Options P&L]
+VAR _mx = MAX ( ABS ( _c ), MAX ( ABS ( _e ), ABS ( _o ) ) )
+VAR _bar = 560
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='#0F1712'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _c > MAX ( _e, _o ), "Only crypto pays", "Crypto is not the winner" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Cumulative P&amp;L by week</text>"
+        & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#0F1712'>By asset</text>"
+        & "<svg x='28' y='76' width='828' height='178'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Crypto vs Equity Weekly], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+        & "<text x='28' y='276' font-size='12' font-weight='700' fill='#FFFFFF'>Crypto</text>"
+        & "<rect x='110' y='268' width='" & FORMAT ( _bar * ABS ( _c ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#4ED15A'/>"
+        & "<text x='856' y='276' font-size='12' font-weight='700' text-anchor='end' fill='#4ED15A'>" & FORMAT ( _c, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='298' font-size='12' font-weight='700' fill='#FFFFFF'>Equity</text>"
+        & "<rect x='110' y='290' width='" & FORMAT ( _bar * ABS ( _e ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#E0574C'/>"
+        & "<text x='856' y='298' font-size='12' font-weight='700' text-anchor='end' fill='#E0574C'>" & FORMAT ( _e, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='320' font-size='12' font-weight='700' fill='#FFFFFF'>Options</text>"
+        & "<rect x='110' y='312' width='" & FORMAT ( _bar * ABS ( _o ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#E0574C'/>"
+        & "<text x='856' y='320' font-size='12' font-weight='700' text-anchor='end' fill='#E0574C'>" & FORMAT ( _o, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='344' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Crypto Trades], "#,0" ) & " crypto trades · " & FORMAT ( [Crypto Win Rate], "0%" ) & " win · PF " & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & "</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

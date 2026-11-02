@@ -1,0 +1,27 @@
+-- Measure: SVG - Rail
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 07-page1-layout
+
+-- left navigation rail (page 1 active)
+VAR _active = 1
+VAR _item = "<g font-size='11' text-anchor='middle'>"
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='72' height='1080' fill='#0F1712'/>"
+        & "<rect x='14' y='24' width='44' height='44' rx='12' fill='#4ED15A'/>"
+        & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='#0F1712' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+        & _item
+        & "<polyline points='26,140 32,132 38,136 46,126' fill='none' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<line x1='26' y1='144' x2='46' y2='144' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='164' fill='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Book</text>"
+        & "<circle cx='36' cy='212' r='10' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<circle cx='36' cy='212' r='4' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='240' fill='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Edge</text>"
+        & "<rect x='26' y='278' width='20' height='16' rx='3' fill='none' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<line x1='26' y1='285' x2='46' y2='285' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='314' fill='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Desk</text>"
+        & "<circle cx='36' cy='1030' r='5' fill='#4ED15A'/>"
+        & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
+        & "</g></svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

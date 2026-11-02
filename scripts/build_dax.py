@@ -183,7 +183,8 @@ FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K" & " sitting in cash · "
 
 # ───────────────────────── 05 · HTML cards (HTML Content visual) ─────────────────────────
 H = "05-html-cards"
-CARD_CSS = col("font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden")
+CARD_CSS = col("font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden")
+PANEL_CSS = CARD_CSS.replace("height:156px", "height:322px")
 
 def bars(heights_expr):
     """mini bar strip: heights_expr is a DAX list of (value, color) pairs built inline"""
@@ -201,17 +202,17 @@ VAR _sub = {sub_expr}
 VAR _color = {vcol}
 RETURN
     "<div style='{CARD_CSS};background:{bg};color:{fg}'>"
-        & "<div style='font-size:12px;font-weight:600;color:{mut}'>{label}</div>"
-        & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-        & "<div style='font-size:11px;color:{mut};margin-top:6px'>" & _sub & "</div>"{mini_part}
+        & "<div style='font-size:14px;font-weight:600;color:{mut}'>{label}</div>"
+        & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:13px;color:{mut};margin-top:8px'>" & _sub & "</div>"{mini_part}
         & "</div>" """)
 
 SIGN = lambda e: f'IF ( {e} < 0, "{C["LOSS"]}", "{C["LEAF6"]}" )'
 MINI = lambda a, b, c: (  # three proportional bars in the corner: values a,b,c (DAX), colours fixed
-    f'"<div style=\'position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px\'>"'
-    f' & "<i style=\'width:7px;background:{C["LOSS"]};height:" & FORMAT ( 34 * DIVIDE ( ABS ( {a} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
-    f' & "<i style=\'width:7px;background:{C["LEAF6"]};height:" & FORMAT ( 34 * DIVIDE ( ABS ( {b} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
-    f' & "<i style=\'width:7px;background:{C["LEAF"]};height:" & FORMAT ( 34 * DIVIDE ( ABS ( {c} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
+    f'"<div style=\'position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px\'>"'
+    f' & "<i style=\'width:9px;background:{C["LOSS"]};height:" & FORMAT ( 48 * DIVIDE ( ABS ( {a} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
+    f' & "<i style=\'width:9px;background:{C["LEAF6"]};height:" & FORMAT ( 48 * DIVIDE ( ABS ( {b} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
+    f' & "<i style=\'width:9px;background:{C["LEAF"]};height:" & FORMAT ( 48 * DIVIDE ( ABS ( {c} ), MAX ( ABS ( {a} ), MAX ( ABS ( {b} ), ABS ( {c} ) ) ) ), "0", "en-US" ) & "px\'></i>"'
     f' & "</div>"')
 
 # Page 1
@@ -247,12 +248,12 @@ card("Card - Turnover HTML", "Turnover", 'FORMAT ( [Turnover] / 1000000, "$0.0",
 def panel(name, body, dark=False):
     bg = col("{INK}") if dark else col("{MINT}")
     fg = "#FFFFFF" if dark else col("{INK}")
-    m(H, name, f'"<div style=\'{CARD_CSS};background:{bg};color:{fg};padding:22px\'>" & {body} & "</div>"')
+    m(H, name, f'"<div style=\'{PANEL_CSS};background:{bg};color:{fg};padding:26px 28px\'>" & {body} & "</div>"')
 
 ROW = lambda title, sub, good: (f'"<div style=\'display:flex;gap:12px;align-items:center;margin-top:14px\'>'
     f'<span style=\'width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:{C["LEAF6"] if good else C["LOSS"]}\'>&#9679;</span>'
-    f'<span><b style=\'font-size:15px\'>" & {title} & "</b><br><span style=\'font-size:11px;color:{C["MUT"]}\'>" & {sub} & "</span></span></div>"')
-BIG = lambda v, sub, color=C["INK"]: (f'"<div style=\'font-size:44px;font-weight:800;letter-spacing:-.03em;color:{color}\'>" & {v} & "</div>"'
+    f'<span><b style=\'font-size:17px\'>" & {title} & "</b><br><span style=\'font-size:11px;color:{C["MUT"]}\'>" & {sub} & "</span></span></div>"')
+BIG = lambda v, sub, color=C["INK"]: (f'"<div style=\'font-size:56px;font-weight:800;letter-spacing:-.03em;color:{color}\'>" & {v} & "</div>"'
     f' & "<div style=\'font-size:13px;font-weight:600;margin-top:2px\'>" & {sub} & "</div>"')
 
 panel("Panel - Max Drawdown HTML",
@@ -275,7 +276,7 @@ panel("Panel - Shorts vs Longs HTML",
 
 # ───────────────────────── 06 · SVG visuals (Image URL / HTML Content) ─────────────────────────
 S = "06-svg-visuals"
-SVG_END = 'RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )'
+SVG_END = 'RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #'
 TRADE_DATES = 'FILTER ( ALLSELECTED ( gold_dim_date[Date] ), NOT ISBLANK ( [Net P&L] ) )'
 
 m(S, "SVG - Equity Curve & Drawdown", col(f"""
@@ -296,7 +297,7 @@ VAR _y0 = 10 + _hi / MAX ( 1, _hi - _lo ) * 120
 VAR _last = TOPN ( 1, _pts, gold_dim_date[Date], DESC )
 VAR _lx = MAXX ( _last, [@x] )  VAR _ly = MAXX ( _last, [@y] )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI' >"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' >"
         & "<line x1='44' x2='892' y1='" & FORMAT ( _y0, "0.0", "en-US" ) & "' y2='" & FORMAT ( _y0, "0.0", "en-US" ) & "' stroke='{{HAIR}}'/>"
         & "<text x='0' y='" & FORMAT ( _y0 + 4, "0.0", "en-US" ) & "' font-size='10' fill='{{MUT}}'>$0</text>"
         & "<polyline points='" & _line & "' fill='none' stroke='{{LEAF6}}' stroke-width='2' stroke-linejoin='round'/>"
@@ -319,7 +320,7 @@ VAR _z = 300 - _min * _sc
 VAR _x1 = _z + _gw * _sc  VAR _x2 = _x1 + _st * _sc  VAR _x3 = _x2 + _ot * _sc
 VAR _row = ( 0 )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI' font-size='13'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
         & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='136' stroke='#BFC8C0'/>"
         & "<text x='0' y='19' fill='{{INK}}'>Gross wins</text><rect x='" & FORMAT ( _z, "0.0", "en-US" ) & "' y='4' width='" & FORMAT ( ( _x1 - _z ), "0.0", "en-US" ) & "' height='22' rx='6' fill='{{LEAF6}}'/>"
         & "<text x='900' y='19' text-anchor='end' font-weight='700' fill='{{LEAF6}}'>" & FORMAT ( _gw, "+$#,0", "en-US" ) & "</text>"
@@ -346,7 +347,7 @@ VAR _P = ( 0 )
 VAR _lc = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@c] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
 VAR _le = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@e] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<polyline points='" & _lc & "' fill='none' stroke='{{LEAF}}' stroke-width='2.5'/>"
         & "<polyline points='" & _le & "' fill='none' stroke='{{LOSS}}' stroke-width='2.5'/>"
         & "<text x='720' y='20' font-size='13' font-weight='700' fill='{{LEAF}}'>Crypto " & FORMAT ( [Crypto P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
@@ -369,14 +370,14 @@ VAR _rows = CONCATENATEX ( _rk,
     VAR x = _z + [@v] / _m * 320
     VAR c = IF ( [@v] >= 0, "{{LEAF6}}", "{{LOSS}}" )
     RETURN
-        "<text x='0' y='" & yt & "' font-family='Geist Mono,Consolas' font-size='12' fill='{{INK}}'>" & gold_fact_trades[strategy] & "</text>"
+        "<text x='0' y='" & yt & "' font-family='Geist Mono,Consolas,Menlo,monospace' font-size='12' fill='{{INK}}'>" & gold_fact_trades[strategy] & "</text>"
         & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( x, "0.0", "en-US" ) & "' y1='" & y & "' y2='" & y & "' stroke='" & c & "' stroke-width='2'/>"
         & "<circle cx='" & FORMAT ( x, "0.0", "en-US" ) & "' cy='" & y & "' r='" & FORMAT ( 5 + 7 * SQRT ( [@n] / _maxn ), "0.0", "en-US" ) & "' fill='" & c & "' stroke='#fff' stroke-width='1.5'/>"
         & "<text x='" & FORMAT ( x + IF ( [@v] >= 0, 16, -16 ), "0.0", "en-US" ) & "' y='" & yt & "' font-size='12' font-weight='700' fill='" & c & "' text-anchor='" & IF ( [@v] >= 0, "start", "end" ) & "'>" & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</text>"
         & "<text x='900' y='" & yt & "' font-size='11' fill='{{MUT}}' text-anchor='end'>" & [@n] & " trades</text>",
     "", [@i], ASC )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 214' font-family='Plus Jakarta Sans,Segoe UI'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 214' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='200' stroke='#BFC8C0'/>" & _rows & "</svg>"
 {SVG_END}"""))
 
@@ -398,7 +399,7 @@ VAR _cols = CONCATENATEX ( _cnt,
         & "<text x='" & cx & "' y='" & ( 168 - INT ( MAX ( n - 1, 0 ) / 4 ) * 10 - 10 ) & "' font-size='10' font-weight='700' text-anchor='middle' fill='{{INK}}'>" & n & "</text>"
         & "<text x='" & cx & "' y='202' font-size='10' text-anchor='middle' fill='{{MUT}}'>" & FORMAT ( b, "+0.0;-0.0;0", "en-US" ) & "R" & "</text>",
     "", [@bin], ASC )
-VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI'>"
+VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<line x1='0' x2='900' y1='188' y2='188' stroke='{{HAIR}}'/>" & _cols & "</svg>"
 {SVG_END}"""))
 
@@ -411,7 +412,7 @@ VAR _lw = CALCULATE ( [Wins], KEEPFILTERS ( gold_fact_trades[side] = "long" ) )
 VAR _ll = [Long Trades] - _lw
 VAR _u = 3.1
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI' font-size='13'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
         & "<text x='0' y='22' fill='#fff' font-weight='700'>Short</text>"
         & "<rect x='70' y='10' width='" & FORMAT ( _sw * _u, "0.0", "en-US" ) & "' height='16' fill='{{LEAF}}'/>"
         & "<rect x='" & FORMAT ( 70 + _sw * _u, "0.0", "en-US" ) & "' y='10' width='" & FORMAT ( _sl * _u, "0.0", "en-US" ) & "' height='16' fill='{{LOSS}}'/>"
@@ -439,7 +440,7 @@ VAR _tiles = CONCATENATEX ( _x,
             "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='18' font-size='12' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
             & "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='110' font-size='12' font-weight='700' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
     "", [@i], ASC )
-VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI'>" & _tiles & "</svg>"
+VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>" & _tiles & "</svg>"
 {SVG_END}"""))
 
 m(S, "SVG - Order Flow Sankey", col(f"""
@@ -477,7 +478,7 @@ VAR _nodes =
             & "<text x='616' y='" & FORMAT ( y + n * _k / 2 + 4, "0.0", "en-US" ) & "' font-size='11' fill='{{INK}}'>" & SWITCH ( g, 1, "Filled", 2, "Canceled", 3, "Expired", "Working" ) & " " & n
             & " (" & FORMAT ( n / _tot, "0%" ) & ")</text>", "" )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 240' font-family='Plus Jakarta Sans,Segoe UI'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 240' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<rect x='150' y='10' width='8' height='" & FORMAT ( 180 + 2 * _gap, "0", "en-US" ) & "' fill='{{INK}}'/>"
         & "<text x='140' y='110' font-size='18' font-weight='800' text-anchor='end' fill='{{INK}}'>" & _tot & "</text>"
         & "<text x='140' y='126' font-size='10' text-anchor='end' fill='{{MUT}}'>orders</text>"
@@ -488,7 +489,7 @@ m(S, "SVG - Cash Donut", col(f"""
 VAR _p = [Capital Deployed %]
 VAR _r = 40  VAR _c = 2 * PI () * _r
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' font-family='Plus Jakarta Sans,Segoe UI'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<circle cx='50' cy='50' r='40' fill='none' stroke='{{HAIR}}' stroke-width='9'/>"
         & "<circle cx='50' cy='50' r='40' fill='none' stroke='{{LEAF6}}' stroke-width='9' stroke-linecap='round'"
         & " stroke-dasharray='" & FORMAT ( _p * _c, "0.0", "en-US" ) & " " & FORMAT ( _c, "0.0", "en-US" ) & "' transform='rotate(-90 50 50)'/>"
@@ -500,7 +501,7 @@ m(S, "SVG - Market Coverage", col(f"""
 VAR _eq = DIVIDE ( [Equities Priced], [Equities Tracked] )
 VAR _cr = DIVIDE ( [Crypto Priced], [Crypto Pairs Tracked] )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' font-family='Plus Jakarta Sans,Segoe UI' font-size='11'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='11'>"
         & "<text x='0' y='14' fill='#fff' font-weight='700'>Equities</text>"
         & "<rect x='80' y='6' width='260' height='8' rx='4' fill='rgba(255,255,255,.12)'/><rect x='80' y='6' width='" & FORMAT ( 260 * _eq, "0", "en-US" ) & "' height='8' rx='4' fill='{{LEAF}}'/>"
         & "<text x='400' y='14' text-anchor='end' fill='{{LEAF}}' font-weight='700'>" & [Equities Priced] & "/" & [Equities Tracked] & "</text>"
@@ -508,6 +509,103 @@ VAR _svg =
         & "<rect x='80' y='36' width='260' height='8' rx='4' fill='rgba(255,255,255,.12)'/><rect x='80' y='36' width='" & FORMAT ( 260 * _cr, "0", "en-US" ) & "' height='8' rx='4' fill='{{LOSS}}'/>"
         & "<text x='400' y='44' text-anchor='end' fill='{{LOSS}}' font-weight='700'>" & [Crypto Priced] & "/" & [Crypto Pairs Tracked] & "</text>"
         & "</svg>"
+{SVG_END}"""))
+
+# ───────────────────────── 07 · page 1 layout (framed SVGs sized to their slot) ─────────────────────────
+# Page grid (1920 x 1080): rail 0-72 · content x 96..1888 · header y24 h96 · KPIs y140 h170
+# row 2 y334 h340 · row 3 y698 h358 · half-width cards 884 wide at x 96 / 1004
+L1 = "07-page1-layout"
+RAW = lambda m_: f'SUBSTITUTE ( SUBSTITUTE ( MID ( [{m_}], 25, 100000 ), "%23", "#" ), "%25", "%" )'   # strip data-URI prefix
+
+def framed(name, inner, w, h, title_expr, sub_expr, dark=False, extra="\"\"", inner_box=(28, 88, None, None)):
+    bg = C["INK"] if dark else "#FFFFFF"
+    tc = "#FFFFFF" if dark else C["INK"]
+    mc = "rgba(255,255,255,.6)" if dark else C["MUT"]
+    ix, iy, iw, ih = inner_box
+    iw = iw or w - 2 * ix
+    ih = ih or h - iy - 20
+    m(L1, name, f"""
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {w} {h}' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='{w}' height='{h}' rx='22' fill='{bg}'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='{tc}'>" & {title_expr} & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='{mc}'>" & {sub_expr} & "</text>"
+        & {extra}
+        & "<svg x='{ix}' y='{iy}' width='{iw}' height='{ih}'>" & {RAW(inner)} & "</svg>"
+        & "</svg>"
+{SVG_END}""")
+
+def pill(x, y, w, text_expr, bg, fg, h=26):
+    return (f'"<rect x=\'{x}\' y=\'{y}\' width=\'{w}\' height=\'{h}\' rx=\'{h//2}\' fill=\'{bg}\'/>'
+            f'<text x=\'{x + w/2}\' y=\'{y + h/2 + 4}\' font-size=\'12\' font-weight=\'700\' text-anchor=\'middle\' fill=\'{fg}\'>" & {text_expr} & "</text>"')
+
+framed("SVG - Card Equity Curve", "SVG - Equity Curve & Drawdown", 884, 340,
+       '"Equity curve &amp; drawdown"', '"Cumulative closed P&amp;L by day · shaded = distance below the running peak"',
+       extra=pill(704, 22, 66, '"Daily"', C["INK"], "#FFFFFF") + ' & ' + pill(776, 22, 80, '"Weekly"', "#FFFFFF", C["MUT"]))
+framed("SVG - Card Waterfall", "SVG - P&L Waterfall", 884, 358,
+       "[Title - The Book]", '"P&amp;L waterfall · stop exits alone erase more than half of all gains"',
+       extra=pill(686, 22, 170, '"Stops = " & FORMAT ( [Stop Share of Gains], "0%" ) & " of gains"', "#FDE7E4", "#C2453A"),
+       inner_box=(28, 100, None, 230))
+m(L1, "SVG - Card Crypto", col(f"""
+-- dark card: weekly cumulative lines + one bar per asset class
+VAR _c = [Crypto P&L]  VAR _e = [Equity P&L]  VAR _o = [Options P&L]
+VAR _mx = MAX ( ABS ( _c ), MAX ( ABS ( _e ), ABS ( _o ) ) )
+VAR _bar = 560
+VAR _row = ( 0 )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='{{INK}}'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _c > MAX ( _e, _o ), "Only crypto pays", "Crypto is not the winner" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Cumulative P&amp;L by week</text>"
+        & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='{{INK}}'>By asset</text>"
+        & "<svg x='28' y='76' width='828' height='178'>" & {RAW("SVG - Crypto vs Equity Weekly")} & "</svg>"
+        & "<text x='28' y='276' font-size='12' font-weight='700' fill='#FFFFFF'>Crypto</text>"
+        & "<rect x='110' y='268' width='" & FORMAT ( _bar * ABS ( _c ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='{{LEAF}}'/>"
+        & "<text x='856' y='276' font-size='12' font-weight='700' text-anchor='end' fill='{{LEAF}}'>" & FORMAT ( _c, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='298' font-size='12' font-weight='700' fill='#FFFFFF'>Equity</text>"
+        & "<rect x='110' y='290' width='" & FORMAT ( _bar * ABS ( _e ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='{{LOSS}}'/>"
+        & "<text x='856' y='298' font-size='12' font-weight='700' text-anchor='end' fill='{{LOSS}}'>" & FORMAT ( _e, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='320' font-size='12' font-weight='700' fill='#FFFFFF'>Options</text>"
+        & "<rect x='110' y='312' width='" & FORMAT ( _bar * ABS ( _o ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='{{LOSS}}'/>"
+        & "<text x='856' y='320' font-size='12' font-weight='700' text-anchor='end' fill='{{LOSS}}'>" & FORMAT ( _o, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='28' y='344' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Crypto Trades], "#,0" ) & " crypto trades · " & FORMAT ( [Crypto Win Rate], "0%" ) & " win · PF " & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & "</text>"
+        & "</svg>"
+{SVG_END}""").replace("VAR _row = ( 0 )\n", ""))
+
+m(L1, "SVG - Header The Book", col(f"""
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='{{INK}}'>The Book</text>"
+        & "<text x='2' y='78' font-size='15' fill='{{MUT}}'>" & [Subtitle - The Book] & "</text>"
+        & "<rect x='1320' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='{{HAIR}}'/>"
+        & "<circle cx='1344' cy='47' r='5' fill='{{LEAF}}'/><text x='1358' y='52' font-size='14' font-weight='600' fill='{{INK}}'>Alpaca · Paper</text>"
+        & "<rect x='1502' y='26' width='150' height='42' rx='21' fill='{{INK}}'/><text x='1520' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Last 10 weeks  ⌄</text>"
+        & "<rect x='1664' y='26' width='128' height='42' rx='21' fill='{{INK}}'/><text x='1682' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All assets  ⌄</text>"
+        & "</svg>"
+{SVG_END}"""))
+
+m(L1, "SVG - Rail", col(f"""
+-- left navigation rail (page 1 active)
+VAR _active = 1
+VAR _item = "<g font-size='11' text-anchor='middle'>"
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='72' height='1080' fill='{{INK}}'/>"
+        & "<rect x='14' y='24' width='44' height='44' rx='12' fill='{{LEAF}}'/>"
+        & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='{{INK}}' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+        & _item
+        & "<polyline points='26,140 32,132 38,136 46,126' fill='none' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<line x1='26' y1='144' x2='46' y2='144' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='164' fill='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Book</text>"
+        & "<circle cx='36' cy='212' r='10' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<circle cx='36' cy='212' r='4' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='240' fill='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Edge</text>"
+        & "<rect x='26' y='278' width='20' height='16' rx='3' fill='none' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<line x1='26' y1='285' x2='46' y2='285' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+        & "<text x='36' y='314' fill='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Desk</text>"
+        & "<circle cx='36' cy='1030' r='5' fill='{{LEAF}}'/>"
+        & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
+        & "</g></svg>"
 {SVG_END}"""))
 
 # ───────────────────────── write ─────────────────────────

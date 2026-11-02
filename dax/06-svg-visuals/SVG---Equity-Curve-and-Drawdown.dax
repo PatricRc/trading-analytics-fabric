@@ -20,7 +20,7 @@ VAR _y0 = 10 + _hi / MAX ( 1, _hi - _lo ) * 120
 VAR _last = TOPN ( 1, _pts, gold_dim_date[Date], DESC )
 VAR _lx = MAXX ( _last, [@x] )  VAR _ly = MAXX ( _last, [@y] )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI' >"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' >"
         & "<line x1='44' x2='892' y1='" & FORMAT ( _y0, "0.0", "en-US" ) & "' y2='" & FORMAT ( _y0, "0.0", "en-US" ) & "' stroke='#E3E8E3'/>"
         & "<text x='0' y='" & FORMAT ( _y0 + 4, "0.0", "en-US" ) & "' font-size='10' fill='#6A746C'>$0</text>"
         & "<polyline points='" & _line & "' fill='none' stroke='#2E9E44' stroke-width='2' stroke-linejoin='round'/>"
@@ -31,4 +31,4 @@ VAR _svg =
         & "<text x='" & FORMAT ( _lx - 8, "0.0", "en-US" ) & "' y='" & FORMAT ( _ly - 10, "0.0", "en-US" ) & "' font-size='12' font-weight='700' text-anchor='end' fill='#0F1712'>" & FORMAT ( [Net P&L], "$#,0;-$#,0", "en-US" ) & "</text>"
         & "<text x='300' y='214' font-size='10' font-weight='600' fill='#E0574C'>Max drawdown " & FORMAT ( _ddlo, "$#,0;-$#,0", "en-US" ) & "</text>"
         & "</svg>"
-RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

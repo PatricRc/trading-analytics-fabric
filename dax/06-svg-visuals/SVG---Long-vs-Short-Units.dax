@@ -10,7 +10,7 @@ VAR _lw = CALCULATE ( [Wins], KEEPFILTERS ( gold_fact_trades[side] = "long" ) )
 VAR _ll = [Long Trades] - _lw
 VAR _u = 3.1
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI' font-size='13'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
         & "<text x='0' y='22' fill='#fff' font-weight='700'>Short</text>"
         & "<rect x='70' y='10' width='" & FORMAT ( _sw * _u, "0.0", "en-US" ) & "' height='16' fill='#4ED15A'/>"
         & "<rect x='" & FORMAT ( 70 + _sw * _u, "0.0", "en-US" ) & "' y='10' width='" & FORMAT ( _sl * _u, "0.0", "en-US" ) & "' height='16' fill='#E0574C'/>"
@@ -20,4 +20,4 @@ VAR _svg =
         & "<rect x='" & FORMAT ( 70 + _lw * _u, "0.0", "en-US" ) & "' y='54' width='" & FORMAT ( _ll * _u, "0.0", "en-US" ) & "' height='16' fill='#E0574C'/>"
         & "<text x='70' y='86' font-size='11' fill='rgba(255,255,255,.6)'>" & _lw & " won · " & _ll & " lost</text>"
         & "</svg>"
-RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

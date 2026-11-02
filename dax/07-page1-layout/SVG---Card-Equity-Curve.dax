@@ -1,0 +1,14 @@
+-- Measure: SVG - Card Equity Curve
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 07-page1-layout
+
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+        & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Equity curve &amp; drawdown" & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Cumulative closed P&amp;L by day · shaded = distance below the running peak" & "</text>"
+        & "<rect x='704' y='22' width='66' height='26' rx='13' fill='#0F1712'/><text x='737.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#FFFFFF'>" & "Daily" & "</text>" & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#6A746C'>" & "Weekly" & "</text>"
+        & "<svg x='28' y='88' width='828' height='232'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Equity Curve & Drawdown], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

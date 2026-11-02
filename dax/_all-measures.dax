@@ -320,10 +320,10 @@ DEFINE
         VAR _sub = "<span style='background:" & IF ( [Day P&L] < 0, "#E0574C", "#2E9E44" ) & ";color:#fff;border-radius:8px;padding:2px 7px;font-weight:700'>" & FORMAT ( [Day P&L], "+$#,0;-$#,0", "en-US" ) & "</span> today"
         VAR _color = "#FFFFFF"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
-                & "<div style='font-size:12px;font-weight:600;color:rgba(255,255,255,.62)'>Account equity</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:rgba(255,255,255,.62);margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Day P&L] ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Account Equity]/100 ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Account Equity]/200 ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
+                & "<div style='font-size:14px;font-weight:600;color:rgba(255,255,255,.62)'>Account equity</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:rgba(255,255,255,.62);margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Day P&L] ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Account Equity]/100 ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Account Equity]/200 ), MAX ( ABS ( [Day P&L] ), MAX ( ABS ( [Account Equity]/100 ), ABS ( [Account Equity]/200 ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Net Closed P&L HTML] =
@@ -331,10 +331,10 @@ DEFINE
         VAR _sub = "crypto · equity · options"
         VAR _color = IF ( [Net P&L] < 0, "#E0574C", "#2E9E44" )
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Net closed P&L</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Options P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Equity P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Crypto P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Net closed P&L</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Options P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Equity P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Crypto P&L] ), MAX ( ABS ( [Options P&L] ), MAX ( ABS ( [Equity P&L] ), ABS ( [Crypto P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Win Rate HTML] =
@@ -342,10 +342,10 @@ DEFINE
         VAR _sub = FORMAT ( [Wins], "#,0" ) & " won · " & FORMAT ( [Losses], "#,0" ) & " lost"
         VAR _color = "#0F1712"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Win rate</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Losses] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Win rate</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Losses] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Wins] ), MAX ( ABS ( [Losses] ), MAX ( ABS ( [Wins] ), ABS ( [Wins] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Profit Factor HTML] =
@@ -353,10 +353,10 @@ DEFINE
         VAR _sub = "only crypto clears 1.0 (" & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & ")"
         VAR _color = "#0F1712"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Profit factor</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Wins] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Profit factor</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Gross Wins] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Gross Wins]*[Crypto Profit Factor]/2 ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Expectancy HTML] =
@@ -364,10 +364,10 @@ DEFINE
         VAR _sub = FORMAT ( [Avg R], "+0.00;-0.00", "en-US" ) & "R" & " avg R-multiple"
         VAR _color = "#FFFFFF"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
-                & "<div style='font-size:12px;font-weight:600;color:rgba(255,255,255,.62)'>Expectancy per trade</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:rgba(255,255,255,.62);margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Gross Wins] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Net P&L] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
+                & "<div style='font-size:14px;font-weight:600;color:rgba(255,255,255,.62)'>Expectancy per trade</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:rgba(255,255,255,.62);margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Gross Wins] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Net P&L] ), MAX ( ABS ( [Gross Losses] ), MAX ( ABS ( [Gross Wins] ), ABS ( [Net P&L] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Lost Past -1R HTML] =
@@ -375,10 +375,10 @@ DEFINE
         VAR _sub = FORMAT ( [Lost Past -1R Trades], "#,0" ) & " trades slipped their stop"
         VAR _color = "#E0574C"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Lost past −1R</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Lost past −1R</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Won 1R+ HTML] =
@@ -386,10 +386,10 @@ DEFINE
         VAR _sub = FORMAT ( [Won 1R+ Trades], "#,0" ) & " trades · the real edge"
         VAR _color = "#2E9E44"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Won 1R or more</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Won 1R or more</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Stop Exits HTML] =
@@ -397,10 +397,10 @@ DEFINE
         VAR _sub = FORMAT ( [Stop Exit Recovery %], "0%" ) & " recovered · " & FORMAT ( [Stop Exit P&L], "$#,0;-$#,0", "en-US" )
         VAR _color = "#0F1712"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Stop exits</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Stop exits</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Capital Deployed HTML] =
@@ -408,10 +408,10 @@ DEFINE
         VAR _sub = "<b style='color:#4ED15A'>" & FORMAT ( [Position Market Value] / 1000, "$0.0", "en-US" ) & "K" & "</b> of " & FORMAT ( [Account Equity] / 1000, "$0.0", "en-US" ) & "K" & " equity"
         VAR _color = "#FFFFFF"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
-                & "<div style='font-size:12px;font-weight:600;color:rgba(255,255,255,.62)'>Capital deployed</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:rgba(255,255,255,.62);margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF'>"
+                & "<div style='font-size:14px;font-weight:600;color:rgba(255,255,255,.62)'>Capital deployed</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:rgba(255,255,255,.62);margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Unrealized P&L HTML] =
@@ -419,10 +419,10 @@ DEFINE
         VAR _sub = FORMAT ( [Unrealized %], "+0.0%;-0.0%", "en-US" ) & " on cost · " & [Positions Up] & " up, " & [Positions Down] & " down"
         VAR _color = IF ( [Unrealized P&L] < 0, "#E0574C", "#2E9E44" )
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Unrealized P&L</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Unrealized P&L</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Fill Rate HTML] =
@@ -430,10 +430,10 @@ DEFINE
         VAR _sub = FORMAT ( [Filled Orders], "#,0" ) & " of " & FORMAT ( [Orders], "#,0" ) & " orders filled"
         VAR _color = "#0F1712"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Fill rate</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>" & "<div style='position:absolute;right:18px;bottom:16px;display:flex;gap:4px;align-items:flex-end;height:34px'>" & "<i style='width:7px;background:#E0574C;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#2E9E44;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Filled Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:7px;background:#4ED15A;height:" & FORMAT ( 34 * DIVIDE ( ABS ( [Working Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Fill rate</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>" & "<div style='position:absolute;right:22px;bottom:22px;display:flex;gap:5px;align-items:flex-end;height:48px'>" & "<i style='width:9px;background:#E0574C;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#2E9E44;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Filled Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "<i style='width:9px;background:#4ED15A;height:" & FORMAT ( 48 * DIVIDE ( ABS ( [Working Orders] ), MAX ( ABS ( [Canceled Orders] ), MAX ( ABS ( [Filled Orders] ), ABS ( [Working Orders] ) ) ) ), "0", "en-US" ) & "px'></i>" & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Card - Turnover HTML] =
@@ -441,23 +441,23 @@ DEFINE
         VAR _sub = FORMAT ( [Turnover x Equity], "0", "en-US" ) & "× equity"
         VAR _color = "#0F1712"
         RETURN
-            "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-                & "<div style='font-size:12px;font-weight:600;color:#6A746C'>Turnover</div>"
-                & "<div style='font-size:34px;font-weight:800;letter-spacing:-.02em;margin-top:10px;color:" & _color & "'>" & _val & "</div>"
-                & "<div style='font-size:11px;color:#6A746C;margin-top:6px'>" & _sub & "</div>"
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
+                & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Turnover</div>"
+                & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
+                & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
                 & "</div>" 
 
     MEASURE gold_fact_trades[Panel - Max Drawdown HTML] =
-        "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:22px'>" & "<div style='font-size:44px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Max Drawdown], "$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "max drawdown from the " & FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " peak" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#E0574C'>&#9679;</span><span><b style='font-size:15px'>" & "September " & FORMAT ( [September P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "the bleed" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:15px'>" & "October " & FORMAT ( [October P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "bleeding stopped" & "</span></span></div>" & "</div>"
+        "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Max Drawdown], "$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "max drawdown from the " & FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " peak" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#E0574C'>&#9679;</span><span><b style='font-size:17px'>" & "September " & FORMAT ( [September P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "the bleed" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "October " & FORMAT ( [October P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "bleeding stopped" & "</span></span></div>" & "</div>"
 
     MEASURE gold_fact_trades[Panel - Trailing Stops HTML] =
-        "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:22px'>" & "<div style='font-size:44px;font-weight:800;letter-spacing:-.03em;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:15px'>" & "Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R" & "</span></span></div>" & "</div>"
+        "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R" & "</span></span></div>" & "</div>"
 
     MEASURE gold_fact_trades[Panel - Cash HTML] =
-        "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:22px'>" & "<div style='font-size:44px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K" & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:15px'>" & "Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:15px'>" & [Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure" & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized" & "</span></span></div>" & "</div>"
+        "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K" & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & [Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure" & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized" & "</span></span></div>" & "</div>"
 
     MEASURE gold_fact_trades[Panel - Shorts vs Longs HTML] =
-        "<div style='font-family:Plus Jakarta Sans,Segoe UI,sans-serif;border-radius:18px;padding:16px 18px;height:100%;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF;padding:22px'>" & "<div style='font-size:15px;font-weight:700;margin-bottom:12px'>" & IF ( [Short P&L] > [Long P&L], "Shorts carry the book", "Longs carry the book" ) & "</div>" & "<div style='display:flex;gap:10px'>" & "<div style='flex:1;background:#1B2A20;border-radius:12px;padding:12px'><div style='font-size:11px;opacity:.6'>Short · " & [Short Trades] & "</div><div style='font-size:26px;font-weight:800;color:#4ED15A'>" & FORMAT ( [Short P&L], "+$#,0;-$#,0", "en-US" ) & "</div><div style='font-size:11px;opacity:.6'>" & FORMAT ( [Short Win Rate], "0%" ) & " win</div></div>" & "<div style='flex:1;background:#1B2A20;border-radius:12px;padding:12px'><div style='font-size:11px;opacity:.6'>Long · " & [Long Trades] & "</div><div style='font-size:26px;font-weight:800;color:#E0574C'>" & FORMAT ( [Long P&L], "+$#,0;-$#,0", "en-US" ) & "</div><div style='font-size:11px;opacity:.6'>" & FORMAT ( [Long Win Rate], "0%" ) & " win</div></div>" & "</div>" & "</div>"
+        "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#0F1712;color:#FFFFFF;padding:26px 28px'>" & "<div style='font-size:15px;font-weight:700;margin-bottom:12px'>" & IF ( [Short P&L] > [Long P&L], "Shorts carry the book", "Longs carry the book" ) & "</div>" & "<div style='display:flex;gap:10px'>" & "<div style='flex:1;background:#1B2A20;border-radius:12px;padding:12px'><div style='font-size:11px;opacity:.6'>Short · " & [Short Trades] & "</div><div style='font-size:26px;font-weight:800;color:#4ED15A'>" & FORMAT ( [Short P&L], "+$#,0;-$#,0", "en-US" ) & "</div><div style='font-size:11px;opacity:.6'>" & FORMAT ( [Short Win Rate], "0%" ) & " win</div></div>" & "<div style='flex:1;background:#1B2A20;border-radius:12px;padding:12px'><div style='font-size:11px;opacity:.6'>Long · " & [Long Trades] & "</div><div style='font-size:26px;font-weight:800;color:#E0574C'>" & FORMAT ( [Long P&L], "+$#,0;-$#,0", "en-US" ) & "</div><div style='font-size:11px;opacity:.6'>" & FORMAT ( [Long Win Rate], "0%" ) & " win</div></div>" & "</div>" & "</div>"
 
     MEASURE gold_fact_trades[SVG - Equity Curve & Drawdown] =
         -- line = cumulative closed P&L; red band underneath = drawdown from the running peak
@@ -477,7 +477,7 @@ DEFINE
         VAR _last = TOPN ( 1, _pts, gold_dim_date[Date], DESC )
         VAR _lx = MAXX ( _last, [@x] )  VAR _ly = MAXX ( _last, [@y] )
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI' >"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 220' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' >"
                 & "<line x1='44' x2='892' y1='" & FORMAT ( _y0, "0.0", "en-US" ) & "' y2='" & FORMAT ( _y0, "0.0", "en-US" ) & "' stroke='#E3E8E3'/>"
                 & "<text x='0' y='" & FORMAT ( _y0 + 4, "0.0", "en-US" ) & "' font-size='10' fill='#6A746C'>$0</text>"
                 & "<polyline points='" & _line & "' fill='none' stroke='#2E9E44' stroke-width='2' stroke-linejoin='round'/>"
@@ -488,7 +488,7 @@ DEFINE
                 & "<text x='" & FORMAT ( _lx - 8, "0.0", "en-US" ) & "' y='" & FORMAT ( _ly - 10, "0.0", "en-US" ) & "' font-size='12' font-weight='700' text-anchor='end' fill='#0F1712'>" & FORMAT ( [Net P&L], "$#,0;-$#,0", "en-US" ) & "</text>"
                 & "<text x='300' y='214' font-size='10' font-weight='600' fill='#E0574C'>Max drawdown " & FORMAT ( _ddlo, "$#,0;-$#,0", "en-US" ) & "</text>"
                 & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - P&L Waterfall] =
         -- gross wins → stop exits → other losses → net (bars start from zero, per the style guide)
@@ -498,7 +498,7 @@ DEFINE
         VAR _z = 300 - _min * _sc
         VAR _x1 = _z + _gw * _sc  VAR _x2 = _x1 + _st * _sc  VAR _x3 = _x2 + _ot * _sc
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI' font-size='13'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
                 & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='136' stroke='#BFC8C0'/>"
                 & "<text x='0' y='19' fill='#0F1712'>Gross wins</text><rect x='" & FORMAT ( _z, "0.0", "en-US" ) & "' y='4' width='" & FORMAT ( ( _x1 - _z ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#2E9E44'/>"
                 & "<text x='900' y='19' text-anchor='end' font-weight='700' fill='#2E9E44'>" & FORMAT ( _gw, "+$#,0", "en-US" ) & "</text>"
@@ -509,7 +509,7 @@ DEFINE
                 & "<text x='0' y='121' font-weight='700' fill='#0F1712'>Net P&amp;L</text><rect x='" & FORMAT ( MIN ( _z, _x3 ), "0.0", "en-US" ) & "' y='106' width='" & FORMAT ( ABS ( _z - _x3 ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#0F1712'/>"
                 & "<text x='900' y='121' text-anchor='end' font-weight='700' fill='#0F1712'>" & FORMAT ( _net, "$#,0;-$#,0", "en-US" ) & "</text>"
                 & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Crypto vs Equity Weekly] =
         -- cumulative P&L by week for crypto (green) and equity (red)
@@ -524,14 +524,14 @@ DEFINE
         VAR _lc = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@c] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
         VAR _le = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 700, "0.0", "en-US" ) & "," & FORMAT ( 10 + ( _hi - [@e] ) / ( _hi - _lo ) * 140, "0.0", "en-US" ), " ", [@i], ASC )
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
                 & "<polyline points='" & _lc & "' fill='none' stroke='#4ED15A' stroke-width='2.5'/>"
                 & "<polyline points='" & _le & "' fill='none' stroke='#E0574C' stroke-width='2.5'/>"
                 & "<text x='720' y='20' font-size='13' font-weight='700' fill='#4ED15A'>Crypto " & FORMAT ( [Crypto P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
                 & "<text x='720' y='40' font-size='13' font-weight='700' fill='#E0574C'>Equity " & FORMAT ( [Equity P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
                 & "<text x='720' y='60' font-size='13' font-weight='700' fill='#F2B5AE'>Options " & FORMAT ( [Options P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
                 & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Strategy Lollipop] =
         -- 4 best and 4 worst strategies, stem from $0, dot size = number of trades
@@ -547,16 +547,16 @@ DEFINE
             VAR x = _z + [@v] / _m * 320
             VAR c = IF ( [@v] >= 0, "#2E9E44", "#E0574C" )
             RETURN
-                "<text x='0' y='" & yt & "' font-family='Geist Mono,Consolas' font-size='12' fill='#0F1712'>" & gold_fact_trades[strategy] & "</text>"
+                "<text x='0' y='" & yt & "' font-family='Geist Mono,Consolas,Menlo,monospace' font-size='12' fill='#0F1712'>" & gold_fact_trades[strategy] & "</text>"
                 & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( x, "0.0", "en-US" ) & "' y1='" & y & "' y2='" & y & "' stroke='" & c & "' stroke-width='2'/>"
                 & "<circle cx='" & FORMAT ( x, "0.0", "en-US" ) & "' cy='" & y & "' r='" & FORMAT ( 5 + 7 * SQRT ( [@n] / _maxn ), "0.0", "en-US" ) & "' fill='" & c & "' stroke='#fff' stroke-width='1.5'/>"
                 & "<text x='" & FORMAT ( x + IF ( [@v] >= 0, 16, -16 ), "0.0", "en-US" ) & "' y='" & yt & "' font-size='12' font-weight='700' fill='" & c & "' text-anchor='" & IF ( [@v] >= 0, "start", "end" ) & "'>" & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</text>"
                 & "<text x='900' y='" & yt & "' font-size='11' fill='#6A746C' text-anchor='end'>" & [@n] & " trades</text>",
             "", [@i], ASC )
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 214' font-family='Plus Jakarta Sans,Segoe UI'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 214' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
                 & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='200' stroke='#BFC8C0'/>" & _rows & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - R-Multiple Dots] =
         -- every dot is a trade, binned to the nearest 0.5R (clamped to -2.5R … +3R)
@@ -576,9 +576,9 @@ DEFINE
                 & "<text x='" & cx & "' y='" & ( 168 - INT ( MAX ( n - 1, 0 ) / 4 ) * 10 - 10 ) & "' font-size='10' font-weight='700' text-anchor='middle' fill='#0F1712'>" & n & "</text>"
                 & "<text x='" & cx & "' y='202' font-size='10' text-anchor='middle' fill='#6A746C'>" & FORMAT ( b, "+0.0;-0.0;0", "en-US" ) & "R" & "</text>",
             "", [@bin], ASC )
-        VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI'>"
+        VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
                 & "<line x1='0' x2='900' y1='188' y2='188' stroke='#E3E8E3'/>" & _cols & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Long vs Short Units] =
         -- one tick per trade: wins green, losses red, for shorts and longs
@@ -588,7 +588,7 @@ DEFINE
         VAR _ll = [Long Trades] - _lw
         VAR _u = 3.1
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI' font-size='13'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 90' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
                 & "<text x='0' y='22' fill='#fff' font-weight='700'>Short</text>"
                 & "<rect x='70' y='10' width='" & FORMAT ( _sw * _u, "0.0", "en-US" ) & "' height='16' fill='#4ED15A'/>"
                 & "<rect x='" & FORMAT ( 70 + _sw * _u, "0.0", "en-US" ) & "' y='10' width='" & FORMAT ( _sl * _u, "0.0", "en-US" ) & "' height='16' fill='#E0574C'/>"
@@ -598,7 +598,7 @@ DEFINE
                 & "<rect x='" & FORMAT ( 70 + _lw * _u, "0.0", "en-US" ) & "' y='54' width='" & FORMAT ( _ll * _u, "0.0", "en-US" ) & "' height='16' fill='#E0574C'/>"
                 & "<text x='70' y='86' font-size='11' fill='rgba(255,255,255,.6)'>" & _lw & " won · " & _ll & " lost</text>"
                 & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Positions Treemap] =
         -- strip treemap: width = market value, colour = return on cost
@@ -616,8 +616,8 @@ DEFINE
                     "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='18' font-size='12' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
                     & "<text x='" & FORMAT ( [@x0] + 8, "0.0", "en-US" ) & "' y='110' font-size='12' font-weight='700' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
             "", [@i], ASC )
-        VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI'>" & _tiles & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 120' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>" & _tiles & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Order Flow Sankey] =
         -- all orders → side → outcome; ribbon width = order count
@@ -653,30 +653,30 @@ DEFINE
                     & "<text x='616' y='" & FORMAT ( y + n * _k / 2 + 4, "0.0", "en-US" ) & "' font-size='11' fill='#0F1712'>" & SWITCH ( g, 1, "Filled", 2, "Canceled", 3, "Expired", "Working" ) & " " & n
                     & " (" & FORMAT ( n / _tot, "0%" ) & ")</text>", "" )
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 240' font-family='Plus Jakarta Sans,Segoe UI'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 760 240' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
                 & "<rect x='150' y='10' width='8' height='" & FORMAT ( 180 + 2 * _gap, "0", "en-US" ) & "' fill='#0F1712'/>"
                 & "<text x='140' y='110' font-size='18' font-weight='800' text-anchor='end' fill='#0F1712'>" & _tot & "</text>"
                 & "<text x='140' y='126' font-size='10' text-anchor='end' fill='#6A746C'>orders</text>"
                 & _ribbons & _nodes & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Cash Donut] =
         VAR _p = [Capital Deployed %]
         VAR _r = 40  VAR _c = 2 * PI () * _r
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' font-family='Plus Jakarta Sans,Segoe UI'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
                 & "<circle cx='50' cy='50' r='40' fill='none' stroke='#E3E8E3' stroke-width='9'/>"
                 & "<circle cx='50' cy='50' r='40' fill='none' stroke='#2E9E44' stroke-width='9' stroke-linecap='round'"
                 & " stroke-dasharray='" & FORMAT ( _p * _c, "0.0", "en-US" ) & " " & FORMAT ( _c, "0.0", "en-US" ) & "' transform='rotate(-90 50 50)'/>"
                 & "<text x='50' y='54' font-size='16' font-weight='800' text-anchor='middle' fill='#0F1712'>" & FORMAT ( _p, "0%" ) & "</text>"
                 & "<text x='50' y='66' font-size='6' text-anchor='middle' fill='#6A746C'>INVESTED</text></svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
     MEASURE gold_fact_trades[SVG - Market Coverage] =
         VAR _eq = DIVIDE ( [Equities Priced], [Equities Tracked] )
         VAR _cr = DIVIDE ( [Crypto Priced], [Crypto Pairs Tracked] )
         VAR _svg =
-            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' font-family='Plus Jakarta Sans,Segoe UI' font-size='11'>"
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='11'>"
                 & "<text x='0' y='14' fill='#fff' font-weight='700'>Equities</text>"
                 & "<rect x='80' y='6' width='260' height='8' rx='4' fill='rgba(255,255,255,.12)'/><rect x='80' y='6' width='" & FORMAT ( 260 * _eq, "0", "en-US" ) & "' height='8' rx='4' fill='#4ED15A'/>"
                 & "<text x='400' y='14' text-anchor='end' fill='#4ED15A' font-weight='700'>" & [Equities Priced] & "/" & [Equities Tracked] & "</text>"
@@ -684,7 +684,90 @@ DEFINE
                 & "<rect x='80' y='36' width='260' height='8' rx='4' fill='rgba(255,255,255,.12)'/><rect x='80' y='36' width='" & FORMAT ( 260 * _cr, "0", "en-US" ) & "' height='8' rx='4' fill='#E0574C'/>"
                 & "<text x='400' y='44' text-anchor='end' fill='#E0574C' font-weight='700'>" & [Crypto Priced] & "/" & [Crypto Pairs Tracked] & "</text>"
                 & "</svg>"
-        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( _svg, "#", "%23" )
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card Equity Curve] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Equity curve &amp; drawdown" & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Cumulative closed P&amp;L by day · shaded = distance below the running peak" & "</text>"
+                & "<rect x='704' y='22' width='66' height='26' rx='13' fill='#0F1712'/><text x='737.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#FFFFFF'>" & "Daily" & "</text>" & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#6A746C'>" & "Weekly" & "</text>"
+                & "<svg x='28' y='88' width='828' height='232'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Equity Curve & Drawdown], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card Waterfall] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & [Title - The Book] & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "P&amp;L waterfall · stop exits alone erase more than half of all gains" & "</text>"
+                & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#FDE7E4'/><text x='771.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#C2453A'>" & "Stops = " & FORMAT ( [Stop Share of Gains], "0%" ) & " of gains" & "</text>"
+                & "<svg x='28' y='100' width='828' height='230'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - P&L Waterfall], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card Crypto] =
+        -- dark card: weekly cumulative lines + one bar per asset class
+        VAR _c = [Crypto P&L]  VAR _e = [Equity P&L]  VAR _o = [Options P&L]
+        VAR _mx = MAX ( ABS ( _c ), MAX ( ABS ( _e ), ABS ( _o ) ) )
+        VAR _bar = 560
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='884' height='358' rx='22' fill='#0F1712'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _c > MAX ( _e, _o ), "Only crypto pays", "Crypto is not the winner" ) & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Cumulative P&amp;L by week</text>"
+                & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#0F1712'>By asset</text>"
+                & "<svg x='28' y='76' width='828' height='178'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Crypto vs Equity Weekly], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "<text x='28' y='276' font-size='12' font-weight='700' fill='#FFFFFF'>Crypto</text>"
+                & "<rect x='110' y='268' width='" & FORMAT ( _bar * ABS ( _c ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#4ED15A'/>"
+                & "<text x='856' y='276' font-size='12' font-weight='700' text-anchor='end' fill='#4ED15A'>" & FORMAT ( _c, "+$#,0;-$#,0", "en-US" ) & "</text>"
+                & "<text x='28' y='298' font-size='12' font-weight='700' fill='#FFFFFF'>Equity</text>"
+                & "<rect x='110' y='290' width='" & FORMAT ( _bar * ABS ( _e ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#E0574C'/>"
+                & "<text x='856' y='298' font-size='12' font-weight='700' text-anchor='end' fill='#E0574C'>" & FORMAT ( _e, "+$#,0;-$#,0", "en-US" ) & "</text>"
+                & "<text x='28' y='320' font-size='12' font-weight='700' fill='#FFFFFF'>Options</text>"
+                & "<rect x='110' y='312' width='" & FORMAT ( _bar * ABS ( _o ) / _mx, "0.0", "en-US" ) & "' height='9' rx='4.5' fill='#E0574C'/>"
+                & "<text x='856' y='320' font-size='12' font-weight='700' text-anchor='end' fill='#E0574C'>" & FORMAT ( _o, "+$#,0;-$#,0", "en-US" ) & "</text>"
+                & "<text x='28' y='344' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Crypto Trades], "#,0" ) & " crypto trades · " & FORMAT ( [Crypto Win Rate], "0%" ) & " win · PF " & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & "</text>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Header The Book] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='#0F1712'>The Book</text>"
+                & "<text x='2' y='78' font-size='15' fill='#6A746C'>" & [Subtitle - The Book] & "</text>"
+                & "<rect x='1320' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
+                & "<circle cx='1344' cy='47' r='5' fill='#4ED15A'/><text x='1358' y='52' font-size='14' font-weight='600' fill='#0F1712'>Alpaca · Paper</text>"
+                & "<rect x='1502' y='26' width='150' height='42' rx='21' fill='#0F1712'/><text x='1520' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Last 10 weeks  ⌄</text>"
+                & "<rect x='1664' y='26' width='128' height='42' rx='21' fill='#0F1712'/><text x='1682' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All assets  ⌄</text>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Rail] =
+        -- left navigation rail (page 1 active)
+        VAR _active = 1
+        VAR _item = "<g font-size='11' text-anchor='middle'>"
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='72' height='1080' fill='#0F1712'/>"
+                & "<rect x='14' y='24' width='44' height='44' rx='12' fill='#4ED15A'/>"
+                & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='#0F1712' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                & _item
+                & "<polyline points='26,140 32,132 38,136 46,126' fill='none' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='144' x2='46' y2='144' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='164' fill='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Book</text>"
+                & "<circle cx='36' cy='212' r='10' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<circle cx='36' cy='212' r='4' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='240' fill='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Edge</text>"
+                & "<rect x='26' y='278' width='20' height='16' rx='3' fill='none' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='285' x2='46' y2='285' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='314' fill='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Desk</text>"
+                & "<circle cx='36' cy='1030' r='5' fill='#4ED15A'/>"
+                & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
+                & "</g></svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
 
 EVALUATE
