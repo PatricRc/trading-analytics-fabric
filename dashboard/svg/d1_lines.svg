@@ -1,0 +1,8 @@
+<svg layer-name="Mini · Crypto vs Equity" width="430" height="72" viewBox="0 0 430 72" fill="none" style="flex-shrink:0">
+<line x1="0" y1="29.2" x2="360" y2="29.2" stroke="rgba(255,255,255,0.18)" stroke-dasharray="3 3"/>
+<path d="M0.0 8.4 L40.0 14.1 L80.0 47.2 L120.0 59.9 L160.0 45.1 L200.0 45.1 L240.0 53.8 L280.0 50.7 L320.0 48.3 L360.0 46.4" stroke="#E0574C" stroke-width="2" stroke-linejoin="round"/>
+<path d="M0.0 29.2 L40.0 33.2 L80.0 36.7 L120.0 35.4 L160.0 31.1 L200.0 25.4 L240.0 28.2 L280.0 24.9 L320.0 26.5 L360.0 24.6" stroke="#4ED15A" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="360.0" cy="24.6" r="4" fill="#4ED15A"/><circle cx="360.0" cy="46.4" r="4" fill="#E0574C"/>
+<text x="370.0" y="28.6" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#4ED15A">Crypto</text>
+<text x="370.0" y="50.4" font-family="Plus Jakarta Sans" font-size="11" font-weight="700" fill="#FF8F85">Equity</text>
+</svg>
