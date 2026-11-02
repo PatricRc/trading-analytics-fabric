@@ -64,3 +64,19 @@ The lakehouse holds three versions of the silver layer: `trading.*`, `dbo.silver
 
 ## What's needed to apply this
 The model is in Viewing mode. To apply relationship and column changes, switch the model to **Editing mode** (or give me permission to open it), then the steps above can be run in the TMDL view.
+
+## Applied 2 Nov 2026 (sm_trading_gold, Editing mode)
+| Change | Result |
+|---|---|
+| Relationship `gold_fact_trades[strategy]` → `gold_dim_strategy[strategy]` (1:*, single, active) | added |
+| Relationship `gold_fact_trades[symbol]` → `gold_dim_symbol[symbol]` (1:*, single, active) | added |
+| Relationship `gold_fact_positions[symbol]` → `gold_dim_symbol[symbol]` | added **inactive**: an active one makes the path from `gold_dim_date` ambiguous (date → positions directly vs date → trades → symbol → positions) |
+| `gold_dim_date` marked as date table (key `Date`) | already set, no change |
+| 116 measures from `dax/_all-measures.dax` | saved to the model via DAX query view → Update model. Verified after a page reload: `[Win Rate]`, `[Net P&L]`, `[Title - The Desk]` and `[SVG - Equity Curve & Drawdown]` all resolve |
+
+**Not applied (needs source changes first):**
+- `symbol_key` column and the prices relationship: must be added in the gold notebook, not the model.
+- `opened_date` role: needs a column in `gold_fact_trades`.
+- Crypto `net` vs `gross − fees` gap: silver notebook fix.
+- Hiding foreign-key columns and sorting `MonthName`/`Weekday`: cosmetic, not done.
+- Measure formatting is set in the `.dax` files' header comments, not on the model, so format strings still need to be applied in the Properties pane. `Title - The Desk` contains a `"$0.0K"` format string that DAX doesn't use for display; fix when formatting.
