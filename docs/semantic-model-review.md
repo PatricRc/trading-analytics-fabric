@@ -79,4 +79,4 @@ The model is in Viewing mode. To apply relationship and column changes, switch t
 - `opened_date` role: needs a column in `gold_fact_trades`.
 - Crypto `net` vs `gross − fees` gap: silver notebook fix.
 - Hiding foreign-key columns and sorting `MonthName`/`Weekday`: cosmetic, not done.
-- Measure formatting is set in the `.dax` files' header comments, not on the model, so format strings still need to be applied in the Properties pane. `Title - The Desk` contains a `"$0.0K"` format string that DAX doesn't use for display; fix when formatting.
+- Measure format strings are not on the model yet. Set them in the Properties pane for each measure (the `.dax` headers list the intended format).
