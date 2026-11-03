@@ -278,10 +278,25 @@ RETURN
         & {ROW('"Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" )', 'FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R"', True)}
         & {ROW('MAXX ( _best, gold_fact_trades[strategy] ) & " · " & FORMAT ( MAXX ( _best, [@w] ), "0%" ) & " win"', 'FORMAT ( MAXX ( _best, [@n] ), "0" ) & " trades · " & FORMAT ( MAXX ( _best, [@r] ), "+0.00;-0.00", "en-US" ) & "R avg · most reliable"', True)}
         & "</div>" """)
-panel("Panel - Cash HTML",
-      BIG('FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K"', '"sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity"')
-      + " & " + ROW('"Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" )', 'FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused"', True)
-      + " & " + ROW('[Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure"', 'FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized"', True))
+m(H, "Panel - Cash HTML", f"""
+VAR _eq = [Account Equity]
+VAR _pos = ADDCOLUMNS ( VALUES ( gold_fact_positions[symbol] ), "@mv", [Position Market Value], "@r", [Position Return %] )
+VAR _strip = CONCATENATEX ( _pos,
+    "<span title='" & gold_fact_positions[symbol] & "' style='display:inline-block;height:12px;width:" & FORMAT ( DIVIDE ( [@mv], _eq ) * 100, "0.00", "en-US" ) & "%;background:"
+        & IF ( [@r] >= 0.01, "{C["LEAF6"]}", IF ( [@r] >= 0, "{C["LEAF3"]}", IF ( [@r] > -0.01, "{C["LOSS3"]}", "{C["LOSS"]}" ) ) ) & "'></span>",
+    "", [@mv], DESC )
+VAR _names = CONCATENATEX ( _pos, gold_fact_positions[symbol], " · ", [@mv], DESC )
+RETURN
+    "<div style='{PANEL_CSS};background:{C["MINT"]};color:{C["INK"]};padding:24px 28px'>"
+        & "<div style='display:flex;justify-content:space-between;align-items:flex-start'><div>"
+        & "<div style='font-size:52px;font-weight:800;letter-spacing:-.03em'>" & FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K</div>"
+        & "<div style='font-size:13px;font-weight:600;margin-top:2px'><span style='color:{C["LEAF6"]}'>&#9675;</span> sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity</div></div>"
+        & "<img style='width:92px;height:92px' src=\"\"\" & [SVG - Cash Donut] & \"\"\"/></div>"
+        & "<div style='margin-top:18px;height:12px;border-radius:6px;overflow:hidden;background:{C["HAIR"]};white-space:nowrap;font-size:0'>" & _strip & "</div>"
+        & "<div style='display:flex;justify-content:space-between;font-size:10px;color:{C["MUT"]};margin-top:5px'><span>" & _names & "</span><span>Cash " & FORMAT ( [Cash %], "0%" ) & "</span></div>"
+        & {ROW('"Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" )', 'FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused"', True)}
+        & {ROW('[Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure"', 'FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized"', True)}
+        & "</div>" """)
 panel("Panel - Shorts vs Longs HTML",
       '"<div style=\'font-size:15px;font-weight:700;margin-bottom:12px\'>" & IF ( [Short P&L] > [Long P&L], "Shorts carry the book", "Longs carry the book" ) & "</div>"'
       ' & "<div style=\'display:flex;gap:10px\'>"'
@@ -689,6 +704,94 @@ VAR _svg =
         & "<text x='28' y='338' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Long Share of Trades], "0%" ) & " of trades are long — " & IF ( _lp < _sp, "the losing side", "the winning side" ) & "</text>"
         & "</svg>"
 {SVG_END}""").replace("VAR _box = ( 0 )\n", ""))
+
+# ───────────────────────── 09 · page 3 layout (The Desk) ─────────────────────────
+L3 = "09-page3-layout"
+m(L3, "SVG - Header The Desk", col(f"""
+VAR _asof = CALCULATE ( MAX ( gold_fact_account[Date] ), REMOVEFILTERS ( gold_dim_date ) )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='{{INK}}'>The Desk</text>"
+        & "<text x='2' y='78' font-size='15' fill='{{MUT}}'>What is open right now? · positions · cash · order flow — as of " & FORMAT ( _asof, "d mmm yyyy", "en-US" ) & "</text>"
+        & "<rect x='1376' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='{{HAIR}}'/>"
+        & "<circle cx='1400' cy='47' r='5' fill='{{LEAF}}'/><text x='1414' y='52' font-size='14' font-weight='600' fill='{{INK}}'>Alpaca · Paper</text>"
+        & "<rect x='1558' y='26' width='96' height='42' rx='21' fill='{{INK}}'/><text x='1576' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Today  ⌄</text>"
+        & "<rect x='1664' y='26' width='128' height='42' rx='21' fill='{{INK}}'/><text x='1682' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All assets  ⌄</text>"
+        & "</svg>"
+{SVG_END}"""))
+
+m(L3, "SVG - Card Positions Treemap", col(f"""
+-- strip treemap sized to the card: tile width = market value, colour = return on cost
+VAR _p = ADDCOLUMNS ( VALUES ( gold_fact_positions[symbol] ), "@mv", [Position Market Value], "@r", [Position Return %] )
+VAR _tot = SUMX ( _p, [@mv] )
+VAR _rk = ADDCOLUMNS ( _p, "@i", RANKX ( _p, [@mv], , DESC, DENSE ) )
+VAR _x = ADDCOLUMNS ( _rk, "@x0", VAR i = [@i] RETURN 28 + SUMX ( FILTER ( _rk, [@i] < i ), [@mv] ) / _tot * 828 )
+VAR _tiles = CONCATENATEX ( _x,
+    VAR w = [@mv] / _tot * 828
+    VAR c = IF ( [@r] >= 0.01, "{{LEAF6}}", IF ( [@r] >= 0, "{{LEAF3}}", IF ( [@r] > -0.01, "{{LOSS3}}", "{{LOSS}}" ) ) )
+    VAR tc = IF ( ABS ( [@r] ) >= 0.01, "#FFFFFF", "{{INK}}" )
+    RETURN
+        "<rect x='" & FORMAT ( [@x0] + 2, "0.0", "en-US" ) & "' y='96' width='" & FORMAT ( MAX ( w - 4, 1 ), "0.0", "en-US" ) & "' height='222' rx='10' fill='" & c & "'/>"
+        & IF ( w > 44,
+            "<text x='" & FORMAT ( [@x0] + 12, "0.0", "en-US" ) & "' y='120' font-size='14' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
+            & "<text x='" & FORMAT ( [@x0] + 12, "0.0", "en-US" ) & "' y='137' font-size='10' fill='" & tc & "' fill-opacity='.8'>" & FORMAT ( [@mv], "$#,0", "en-US" ) & " · " & FORMAT ( DIVIDE ( [@mv], _tot ), "0%" ) & "</text>"
+            & "<text x='" & FORMAT ( [@x0] + w - 10, "0.0", "en-US" ) & "' y='306' font-size='14' font-weight='800' text-anchor='end' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
+    "", [@i], ASC )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='{{INK}}'>Open positions · " & IF ( [Top Position Share] >= 0.3, "one name carries the gain", "exposure is spread out" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='{{MUT}}'>Tile area = market value · colour = return on cost · " & FORMAT ( [Open Positions], "0" ) & " open positions</text>"
+        & "<rect x='700' y='30' width='14' height='10' rx='2' fill='{{LOSS}}'/><rect x='716' y='30' width='14' height='10' rx='2' fill='{{LOSS3}}'/>"
+        & "<rect x='732' y='30' width='14' height='10' rx='2' fill='{{LEAF3}}'/><rect x='748' y='30' width='14' height='10' rx='2' fill='{{LEAF6}}'/>"
+        & "<text x='770' y='39' font-size='11' fill='{{MUT}}'>−1% → +1%</text>"
+        & _tiles & "</svg>"
+{SVG_END}"""))
+
+m(L3, "SVG - Card Order Flow", col(f"""
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='{{INK}}'>Where " & FORMAT ( [Orders], "#,0", "en-US" ) & " orders went</text>"
+        & "<text x='28' y='64' font-size='12' fill='{{MUT}}'>Order flow: all orders → side → outcome · band width = order count</text>"
+        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='{{MINT}}'/><text x='771' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='{{LEAF6}}'>" & FORMAT ( [Cancel Rate], "0%" ) & " cancelled · expected</text>"
+        & "<svg x='28' y='88' width='828' height='252'>" & {RAW("SVG - Order Flow Sankey")} & "</svg>"
+        & "</svg>"
+{SVG_END}"""))
+
+m(L3, "SVG - Card Market Coverage", col(f"""
+-- dark card: price coverage bars + one chip per crypto base (green = has daily bars on Alpaca)
+VAR _priced = CALCULATETABLE ( VALUES ( gold_fact_prices_daily[symbol] ), REMOVEFILTERS ( gold_dim_date ), gold_fact_prices_daily[asset_class] = "crypto" )
+VAR _bases = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( gold_dim_symbol[base] ), gold_dim_symbol[asset_class] = "crypto" ),
+    "@ok", IF ( CONTAINS ( _priced, gold_fact_prices_daily[symbol], gold_dim_symbol[base] & "USD" ), 1, 0 ) )
+VAR _n = COUNTROWS ( _bases )
+VAR _ok = SUMX ( _bases, [@ok] )
+VAR _rk = ADDCOLUMNS ( _bases, "@i", RANKX ( _bases, gold_dim_symbol[base], , ASC, DENSE ) - 1 )
+VAR _chips = CONCATENATEX ( _rk,
+    VAR cx = 28 + MOD ( [@i], 12 ) * 69
+    VAR cy = 168 + INT ( [@i] / 12 ) * 30
+    VAR c = IF ( [@ok] = 1, "{{LEAF}}", "{{LOSS}}" )
+    RETURN "<rect x='" & cx & "' y='" & cy & "' width='62' height='22' rx='6' fill='none' stroke='" & c & "' stroke-opacity='.7'/>"
+        & "<text x='" & ( cx + 31 ) & "' y='" & ( cy + 15 ) & "' font-size='10' font-weight='700' text-anchor='middle' fill='" & c & "'>" & LEFT ( gold_dim_symbol[base], 7 ) & "</text>",
+    "", [@i], ASC )
+VAR _eqw = 520 * DIVIDE ( [Equities Priced], [Equities Tracked] )
+VAR _crw = 520 * DIVIDE ( _ok, _n )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='{{INK}}'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>Market coverage</text>"
+        & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Symbols with daily price bars on Alpaca</text>"
+        & "<rect x='756' y='22' width='100' height='26' rx='13' fill='#FFFFFF'/><text x='806' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='{{INK}}'>Daily bars</text>"
+        & "<text x='28' y='104' font-size='13' font-weight='700' fill='#FFFFFF'>Equities</text>"
+        & "<rect x='130' y='96' width='520' height='9' rx='4.5' fill='rgba(255,255,255,.12)'/><rect x='130' y='96' width='" & FORMAT ( _eqw, "0", "en-US" ) & "' height='9' rx='4.5' fill='{{LEAF}}'/>"
+        & "<text x='856' y='104' font-size='13' font-weight='700' text-anchor='end' fill='{{LEAF}}'>" & [Equities Priced] & "/" & [Equities Tracked] & "</text>"
+        & "<text x='28' y='134' font-size='13' font-weight='700' fill='#FFFFFF'>Crypto</text>"
+        & "<rect x='130' y='126' width='520' height='9' rx='4.5' fill='rgba(255,255,255,.12)'/><rect x='130' y='126' width='" & FORMAT ( _crw, "0", "en-US" ) & "' height='9' rx='4.5' fill='{{LOSS}}'/>"
+        & "<text x='856' y='134' font-size='13' font-weight='700' text-anchor='end' fill='{{LOSS}}'>" & _ok & "/" & _n & "</text>"
+        & _chips
+        & "<text x='28' y='340' font-size='11' fill='rgba(255,255,255,.55)'>" & ( _n - _ok ) & " crypto pairs have no Alpaca bars · backfill them from Binance once it's enabled</text>"
+        & "</svg>"
+{SVG_END}"""))
 
 # ───────────────────────── write ─────────────────────────
 def slug(s):

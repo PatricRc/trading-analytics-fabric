@@ -1,0 +1,31 @@
+-- Measure: SVG - Card Positions Treemap
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 09-page3-layout
+
+-- strip treemap sized to the card: tile width = market value, colour = return on cost
+VAR _p = ADDCOLUMNS ( VALUES ( gold_fact_positions[symbol] ), "@mv", [Position Market Value], "@r", [Position Return %] )
+VAR _tot = SUMX ( _p, [@mv] )
+VAR _rk = ADDCOLUMNS ( _p, "@i", RANKX ( _p, [@mv], , DESC, DENSE ) )
+VAR _x = ADDCOLUMNS ( _rk, "@x0", VAR i = [@i] RETURN 28 + SUMX ( FILTER ( _rk, [@i] < i ), [@mv] ) / _tot * 828 )
+VAR _tiles = CONCATENATEX ( _x,
+    VAR w = [@mv] / _tot * 828
+    VAR c = IF ( [@r] >= 0.01, "#2E9E44", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#E0574C" ) ) )
+    VAR tc = IF ( ABS ( [@r] ) >= 0.01, "#FFFFFF", "#0F1712" )
+    RETURN
+        "<rect x='" & FORMAT ( [@x0] + 2, "0.0", "en-US" ) & "' y='96' width='" & FORMAT ( MAX ( w - 4, 1 ), "0.0", "en-US" ) & "' height='222' rx='10' fill='" & c & "'/>"
+        & IF ( w > 44,
+            "<text x='" & FORMAT ( [@x0] + 12, "0.0", "en-US" ) & "' y='120' font-size='14' font-weight='800' fill='" & tc & "'>" & gold_fact_positions[symbol] & "</text>"
+            & "<text x='" & FORMAT ( [@x0] + 12, "0.0", "en-US" ) & "' y='137' font-size='10' fill='" & tc & "' fill-opacity='.8'>" & FORMAT ( [@mv], "$#,0", "en-US" ) & " · " & FORMAT ( DIVIDE ( [@mv], _tot ), "0%" ) & "</text>"
+            & "<text x='" & FORMAT ( [@x0] + w - 10, "0.0", "en-US" ) & "' y='306' font-size='14' font-weight='800' text-anchor='end' fill='" & tc & "'>" & FORMAT ( [@r], "+0.00%;-0.00%", "en-US" ) & "</text>" ),
+    "", [@i], ASC )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>Open positions · " & IF ( [Top Position Share] >= 0.3, "one name carries the gain", "exposure is spread out" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='#6A746C'>Tile area = market value · colour = return on cost · " & FORMAT ( [Open Positions], "0" ) & " open positions</text>"
+        & "<rect x='700' y='30' width='14' height='10' rx='2' fill='#E0574C'/><rect x='716' y='30' width='14' height='10' rx='2' fill='#F2B5AE'/>"
+        & "<rect x='732' y='30' width='14' height='10' rx='2' fill='#A9E5AE'/><rect x='748' y='30' width='14' height='10' rx='2' fill='#2E9E44'/>"
+        & "<text x='770' y='39' font-size='11' fill='#6A746C'>−1% → +1%</text>"
+        & _tiles & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

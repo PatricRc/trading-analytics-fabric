@@ -91,7 +91,22 @@ Original slot plan:
 | R-multiple dots | Image | `SVG - R-Multiple Dots` |
 | Shorts carry the book (dark) | HTML Content + Image | `Panel - Shorts vs Longs HTML`, `SVG - Long vs Short Units` |
 
-## 5 · Page 3 · The Desk — *What is open right now?*
+## 5 · Page 3 · The Desk — *What is open right now?* (built)
+
+![Page 3 in Power BI](../dashboard/screenshots/powerbi-page3-the-desk.png)
+
+Duplicated from The Edge and rebound:
+
+| Slot | Measure |
+|---|---|
+| Rail / Header | `SVG - Rail The Desk`, `SVG - Header The Desk` |
+| KPI 1–4 | `Card - Capital Deployed HTML`, `Card - Unrealized P&L HTML`, `Card - Fill Rate HTML`, `Card - Turnover HTML` |
+| Row 2 left | `SVG - Card Positions Treemap` |
+| Row 2 right | `Panel - Cash HTML` (cash, invested donut, exposure strip) |
+| Row 3 left | `SVG - Card Order Flow` (Sankey) |
+| Row 3 right | `SVG - Card Market Coverage` (bars + one chip per crypto pair) |
+
+Original slot plan:
 
 | Slot | Visual | Measures |
 |---|---|---|

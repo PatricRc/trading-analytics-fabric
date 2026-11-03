@@ -1,0 +1,16 @@
+-- Measure: SVG - Header The Desk
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 09-page3-layout
+
+VAR _asof = CALCULATE ( MAX ( gold_fact_account[Date] ), REMOVEFILTERS ( gold_dim_date ) )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='#0F1712'>The Desk</text>"
+        & "<text x='2' y='78' font-size='15' fill='#6A746C'>What is open right now? · positions · cash · order flow — as of " & FORMAT ( _asof, "d mmm yyyy", "en-US" ) & "</text>"
+        & "<rect x='1376' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
+        & "<circle cx='1400' cy='47' r='5' fill='#4ED15A'/><text x='1414' y='52' font-size='14' font-weight='600' fill='#0F1712'>Alpaca · Paper</text>"
+        & "<rect x='1558' y='26' width='96' height='42' rx='21' fill='#0F1712'/><text x='1576' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Today  ⌄</text>"
+        & "<rect x='1664' y='26' width='128' height='42' rx='21' fill='#0F1712'/><text x='1682' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All assets  ⌄</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
