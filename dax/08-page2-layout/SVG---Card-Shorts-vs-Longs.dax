@@ -1,0 +1,25 @@
+-- Measure: SVG - Card Shorts vs Longs
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 08-page2-layout
+
+-- dark card: short vs long scorecards + one tick per trade
+VAR _sp = [Short P&L]  VAR _lp = [Long P&L]
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='#0F1712'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _sp > _lp, "Shorts carry the book", "Longs carry the book" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Net P&amp;L and win rate by side</text>"
+        & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#0F1712'>By side</text>"
+        & "<rect x='28' y='84' width='404' height='104' rx='16' fill='#1B2A20'/>"
+        & "<text x='48' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Short · " & FORMAT ( [Short Trades], "0" ) & "</text>"
+        & "<text x='48' y='152' font-size='34' font-weight='800' fill='" & IF ( _sp >= 0, "#4ED15A", "#E0574C" ) & "'>" & FORMAT ( _sp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='48' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Short Win Rate], "0%" ) & " win</text>"
+        & "<rect x='452' y='84' width='404' height='104' rx='16' fill='#1B2A20'/>"
+        & "<text x='472' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Long · " & FORMAT ( [Long Trades], "0" ) & "</text>"
+        & "<text x='472' y='152' font-size='34' font-weight='800' fill='" & IF ( _lp >= 0, "#4ED15A", "#E0574C" ) & "'>" & FORMAT ( _lp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='472' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Long Win Rate], "0%" ) & " win</text>"
+        & "<svg x='28' y='206' width='828' height='104'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Long vs Short Units], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+        & "<text x='28' y='338' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Long Share of Trades], "0%" ) & " of trades are long — " & IF ( _lp < _sp, "the losing side", "the winning side" ) & "</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

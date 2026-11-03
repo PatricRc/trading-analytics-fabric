@@ -61,7 +61,23 @@ Original slot plan:
 | P&L waterfall | Image | `SVG - P&L Waterfall` (uses `Gross Wins`, `Stop Exit P&L`, `Other Losses`, `Net P&L`) |
 | Only crypto pays (dark) | Image | `SVG - Crypto vs Equity Weekly` — *native:* line chart, X = `WeekStart`, Y = `Cumulative P&L`, legend = `asset_class` |
 
-## 4 · Page 2 · The Edge — *Where do wins and losses come from?*
+## 4 · Page 2 · The Edge — *Where do wins and losses come from?* (built)
+
+![Page 2 in Power BI](../dashboard/screenshots/powerbi-page2-the-edge.jpg)
+
+Built in `TradingDashboard - Public` by duplicating page 1 (same grid and slots) and rebinding each visual:
+
+| Slot (same position as page 1) | Measure |
+|---|---|
+| Rail | `SVG - Rail The Edge` |
+| Header | `SVG - Header The Edge` |
+| KPI 1–4 | `Card - Expectancy HTML`, `Card - Lost Past -1R HTML`, `Card - Won 1R+ HTML`, `Card - Stop Exits HTML` |
+| Row 2 left | `SVG - Card Strategy Lollipop` |
+| Row 2 right | `Panel - Trailing Stops HTML` (exit bars + best strategy) |
+| Row 3 left | `SVG - Card R-Multiple Dots` |
+| Row 3 right | `SVG - Card Shorts vs Longs` |
+
+Original slot plan:
 
 | Slot | Visual | Measures |
 |---|---|---|

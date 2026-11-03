@@ -102,7 +102,7 @@ m(P2, "Lost Past -1R Trades", "CALCULATE ( [Trades], KEEPFILTERS ( gold_fact_tra
 m(P2, "Won 1R+ P&L", "CALCULATE ( [Net P&L], KEEPFILTERS ( gold_fact_trades[r] >= 1 ) )", "$#,0;-$#,0;$0")
 m(P2, "Won 1R+ Trades", "CALCULATE ( [Trades], KEEPFILTERS ( gold_fact_trades[r] >= 1 ) )", "#,0")
 m(P2, "Stop Exits", 'CALCULATE ( [Trades], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) )', "#,0")
-m(P2, "Stop Exit Recovery %", 'CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) )', "0%")
+m(P2, "Stop Exit Recovery %", 'COALESCE ( CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) ), 0 )  -- no winning stop exits -> 0%, not blank', "0%")
 m(P2, "Trailing P&L", 'CALCULATE ( [Net P&L], KEEPFILTERS ( gold_fact_trades[exit_type] IN { "trailing", "trailing_stop" } ) )', "$#,0;-$#,0;$0")
 m(P2, "Trailing Win Rate", 'CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] IN { "trailing", "trailing_stop" } ) )', "0%")
 m(P2, "Market Exit P&L", 'CALCULATE ( [Net P&L], KEEPFILTERS ( gold_fact_trades[exit_type] = "market" ) )', "$#,0;-$#,0;$0")
@@ -260,9 +260,24 @@ panel("Panel - Max Drawdown HTML",
       BIG('FORMAT ( [Max Drawdown], "$#,0;-$#,0", "en-US" )', '"max drawdown from the " & FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " peak"')
       + " & " + ROW('"September " & FORMAT ( [September P&L], "$#,0;-$#,0", "en-US" )', '"the bleed"', False)
       + " & " + ROW('"October " & FORMAT ( [October P&L], "$#,0;-$#,0", "en-US" )', '"bleeding stopped"', True))
-panel("Panel - Trailing Stops HTML",
-      BIG('FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" )', '"from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win"', C["LEAF6"])
-      + " & " + ROW('"Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" )', 'FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R"', True))
+EXIT_BAR = lambda label, m_: (
+    f'"<div style=\'display:flex;align-items:center;gap:10px;margin-top:7px;font-size:12px\'>'
+    f'<span style=\'width:84px;font-weight:600\'>{label}</span>'
+    f'<span style=\'flex:1;height:9px;border-radius:5px;background:rgba(15,23,18,.08);position:relative\'>'
+    f'<span style=\'position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:{C["LEAF6"]};width:" & FORMAT ( DIVIDE ( MAX ( [{m_}], 0 ), _max ) * 100, "0", "en-US" ) & "%\'></span></span>'
+    f'<span style=\'width:70px;text-align:right;font-weight:700;color:{C["LEAF6"]}\'>" & FORMAT ( [{m_}], "+$#,0;-$#,0", "en-US" ) & "</span></div>"')
+m(H, "Panel - Trailing Stops HTML", f"""
+VAR _max = MAX ( MAX ( [Market Exit P&L], [Trailing P&L] ), MAX ( [Manual Exit P&L], [Take Profit P&L] ) )
+VAR _best = TOPN ( 1, FILTER ( ADDCOLUMNS ( VALUES ( gold_fact_trades[strategy] ), "@n", [Trades], "@w", [Win Rate], "@r", [Avg R] ), [@n] >= 10 ), [@w], DESC, [@n], DESC )
+RETURN
+    "<div style='{PANEL_CSS};background:{C["MINT"]};color:{C["INK"]};padding:24px 28px'>"
+        & "<div style='font-size:48px;font-weight:800;letter-spacing:-.03em;color:{C["LEAF6"]}'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>"
+        & "<div style='font-size:13px;font-weight:600;margin:2px 0 6px'>from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win</div>"
+        & {EXIT_BAR("Market", "Market Exit P&L")} & {EXIT_BAR("Trailing", "Trailing P&L")}
+        & {EXIT_BAR("Manual", "Manual Exit P&L")} & {EXIT_BAR("Take profit", "Take Profit P&L")}
+        & {ROW('"Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" )', 'FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R"', True)}
+        & {ROW('MAXX ( _best, gold_fact_trades[strategy] ) & " · " & FORMAT ( MAXX ( _best, [@w] ), "0%" ) & " win"', 'FORMAT ( MAXX ( _best, [@n] ), "0" ) & " trades · " & FORMAT ( MAXX ( _best, [@r] ), "+0.00;-0.00", "en-US" ) & "R avg · most reliable"', True)}
+        & "</div>" """)
 panel("Panel - Cash HTML",
       BIG('FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K"', '"sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity"')
       + " & " + ROW('"Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" )', 'FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused"', True)
@@ -607,6 +622,73 @@ VAR _svg =
         & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
         & "</g></svg>"
 {SVG_END}"""))
+
+# ───────────────────────── 08 · page 2 layout (The Edge) ─────────────────────────
+L2 = "08-page2-layout"
+_rail = next(e for f_, n_, fm_, e in M if n_ == "SVG - Rail")
+for _name, _active in [("SVG - Rail The Edge", 2), ("SVG - Rail The Desk", 3)]:
+    m(L2 if _active == 2 else "09-page3-layout", _name,
+      _rail.replace("(page 1 active)", f"(page {_active} active)").replace("VAR _active = 1", f"VAR _active = {_active}"))
+
+m(L2, "SVG - Header The Edge", col(f"""
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='{{INK}}'>The Edge</text>"
+        & "<text x='2' y='78' font-size='15' fill='{{MUT}}'>Where do the wins and losses come from? · R-multiples · exits · " & FORMAT ( [Strategies], "0" ) & " strategies</text>"
+        & "<rect x='1290' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='{{HAIR}}'/>"
+        & "<circle cx='1314' cy='47' r='5' fill='{{LEAF}}'/><text x='1328' y='52' font-size='14' font-weight='600' fill='{{INK}}'>Alpaca · Paper</text>"
+        & "<rect x='1472' y='26' width='150' height='42' rx='21' fill='{{INK}}'/><text x='1490' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Last 10 weeks  ⌄</text>"
+        & "<rect x='1634' y='26' width='158' height='42' rx='21' fill='{{INK}}'/><text x='1652' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All strategies  ⌄</text>"
+        & "</svg>"
+{SVG_END}"""))
+
+def framed2(name, inner, w, h, title_expr, sub_expr, extra='""', inner_box=(28, 88, None, None)):
+    ix, iy, iw, ih = inner_box
+    iw = iw or w - 2 * ix
+    ih = ih or h - iy - 20
+    m(L2, name, f"""
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {w} {h}' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='{w}' height='{h}' rx='22' fill='#FFFFFF'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='{C["INK"]}'>" & {title_expr} & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='{C["MUT"]}'>" & {sub_expr} & "</text>"
+        & {extra}
+        & "<svg x='{ix}' y='{iy}' width='{iw}' height='{ih}'>" & {RAW(inner)} & "</svg>"
+        & "</svg>"
+{SVG_END}""")
+
+framed2("SVG - Card Strategy Lollipop", "SVG - Strategy Lollipop", 884, 340,
+        '"Tagged setups earn · untagged legacy bleeds"',
+        '"Net P&amp;L of the 4 best and 4 worst of " & FORMAT ( [Strategies], "0" ) & " strategies · dot size = number of trades"',
+        extra=pill(726, 22, 130, '"4 best · 4 worst"', "#EEF2EE", C["MUT"]), inner_box=(28, 92, None, 228))
+framed2("SVG - Card R-Multiple Dots", "SVG - R-Multiple Dots", 884, 358,
+        '"Every dot is a trade · losses pile up past the stop"',
+        '"Trades with a defined stop, grouped by R-multiple (net P&amp;L ÷ planned risk)"',
+        extra=pill(686, 22, 170, 'FORMAT ( [Lost Past -1R Trades], "0" ) & " slipped the stop"', "#FDE7E4", "#C2453A"),
+        inner_box=(28, 92, None, 246))
+
+m(L2, "SVG - Card Shorts vs Longs", col(f"""
+-- dark card: short vs long scorecards + one tick per trade
+VAR _sp = [Short P&L]  VAR _lp = [Long P&L]
+VAR _box = ( 0 )
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='884' height='358' rx='22' fill='{{INK}}'/>"
+        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _sp > _lp, "Shorts carry the book", "Longs carry the book" ) & "</text>"
+        & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Net P&amp;L and win rate by side</text>"
+        & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='{{INK}}'>By side</text>"
+        & "<rect x='28' y='84' width='404' height='104' rx='16' fill='{{DARK2}}'/>"
+        & "<text x='48' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Short · " & FORMAT ( [Short Trades], "0" ) & "</text>"
+        & "<text x='48' y='152' font-size='34' font-weight='800' fill='" & IF ( _sp >= 0, "{{LEAF}}", "{{LOSS}}" ) & "'>" & FORMAT ( _sp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='48' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Short Win Rate], "0%" ) & " win</text>"
+        & "<rect x='452' y='84' width='404' height='104' rx='16' fill='{{DARK2}}'/>"
+        & "<text x='472' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Long · " & FORMAT ( [Long Trades], "0" ) & "</text>"
+        & "<text x='472' y='152' font-size='34' font-weight='800' fill='" & IF ( _lp >= 0, "{{LEAF}}", "{{LOSS}}" ) & "'>" & FORMAT ( _lp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='472' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Long Win Rate], "0%" ) & " win</text>"
+        & "<svg x='28' y='206' width='828' height='104'>" & {RAW("SVG - Long vs Short Units")} & "</svg>"
+        & "<text x='28' y='338' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Long Share of Trades], "0%" ) & " of trades are long — " & IF ( _lp < _sp, "the losing side", "the winning side" ) & "</text>"
+        & "</svg>"
+{SVG_END}""").replace("VAR _box = ( 0 )\n", ""))
 
 # ───────────────────────── write ─────────────────────────
 def slug(s):

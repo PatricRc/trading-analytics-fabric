@@ -146,7 +146,7 @@ DEFINE
         CALCULATE ( [Trades], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) )
 
     MEASURE gold_fact_trades[Stop Exit Recovery %] =
-        CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) )
+        COALESCE ( CALCULATE ( [Win Rate], KEEPFILTERS ( gold_fact_trades[exit_type] = "stop" ) ), 0 )  -- no winning stop exits -> 0%, not blank
 
     MEASURE gold_fact_trades[Trailing P&L] =
         CALCULATE ( [Net P&L], KEEPFILTERS ( gold_fact_trades[exit_type] IN { "trailing", "trailing_stop" } ) )
@@ -451,7 +451,17 @@ DEFINE
         "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Max Drawdown], "$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "max drawdown from the " & FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " peak" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#E0574C'>&#9679;</span><span><b style='font-size:17px'>" & "September " & FORMAT ( [September P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "the bleed" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "October " & FORMAT ( [October P&L], "$#,0;-$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & "bleeding stopped" & "</span></span></div>" & "</div>"
 
     MEASURE gold_fact_trades[Panel - Trailing Stops HTML] =
-        "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R" & "</span></span></div>" & "</div>"
+        VAR _max = MAX ( MAX ( [Market Exit P&L], [Trailing P&L] ), MAX ( [Manual Exit P&L], [Take Profit P&L] ) )
+        VAR _best = TOPN ( 1, FILTER ( ADDCOLUMNS ( VALUES ( gold_fact_trades[strategy] ), "@n", [Trades], "@w", [Win Rate], "@r", [Avg R] ), [@n] >= 10 ), [@w], DESC, [@n], DESC )
+        RETURN
+            "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:24px 28px'>"
+                & "<div style='font-size:48px;font-weight:800;letter-spacing:-.03em;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</div>"
+                & "<div style='font-size:13px;font-weight:600;margin:2px 0 6px'>from trailing stops · " & FORMAT ( [Trailing Win Rate], "0%" ) & " win</div>"
+                & "<div style='display:flex;align-items:center;gap:10px;margin-top:7px;font-size:12px'><span style='width:84px;font-weight:600'>Market</span><span style='flex:1;height:9px;border-radius:5px;background:rgba(15,23,18,.08);position:relative'><span style='position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#2E9E44;width:" & FORMAT ( DIVIDE ( MAX ( [Market Exit P&L], 0 ), _max ) * 100, "0", "en-US" ) & "%'></span></span><span style='width:70px;text-align:right;font-weight:700;color:#2E9E44'>" & FORMAT ( [Market Exit P&L], "+$#,0;-$#,0", "en-US" ) & "</span></div>" & "<div style='display:flex;align-items:center;gap:10px;margin-top:7px;font-size:12px'><span style='width:84px;font-weight:600'>Trailing</span><span style='flex:1;height:9px;border-radius:5px;background:rgba(15,23,18,.08);position:relative'><span style='position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#2E9E44;width:" & FORMAT ( DIVIDE ( MAX ( [Trailing P&L], 0 ), _max ) * 100, "0", "en-US" ) & "%'></span></span><span style='width:70px;text-align:right;font-weight:700;color:#2E9E44'>" & FORMAT ( [Trailing P&L], "+$#,0;-$#,0", "en-US" ) & "</span></div>"
+                & "<div style='display:flex;align-items:center;gap:10px;margin-top:7px;font-size:12px'><span style='width:84px;font-weight:600'>Manual</span><span style='flex:1;height:9px;border-radius:5px;background:rgba(15,23,18,.08);position:relative'><span style='position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#2E9E44;width:" & FORMAT ( DIVIDE ( MAX ( [Manual Exit P&L], 0 ), _max ) * 100, "0", "en-US" ) & "%'></span></span><span style='width:70px;text-align:right;font-weight:700;color:#2E9E44'>" & FORMAT ( [Manual Exit P&L], "+$#,0;-$#,0", "en-US" ) & "</span></div>" & "<div style='display:flex;align-items:center;gap:10px;margin-top:7px;font-size:12px'><span style='width:84px;font-weight:600'>Take profit</span><span style='flex:1;height:9px;border-radius:5px;background:rgba(15,23,18,.08);position:relative'><span style='position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:#2E9E44;width:" & FORMAT ( DIVIDE ( MAX ( [Take Profit P&L], 0 ), _max ) * 100, "0", "en-US" ) & "%'></span></span><span style='width:70px;text-align:right;font-weight:700;color:#2E9E44'>" & FORMAT ( [Take Profit P&L], "+$#,0;-$#,0", "en-US" ) & "</span></div>"
+                & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Take profit " & FORMAT ( [Take Profit P&L], "+$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Take Profit Trades], "0" ) & " exits · 100% win · avg " & FORMAT ( [Take Profit Avg R], "0.00", "en-US" ) & "R" & "</span></span></div>"
+                & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & MAXX ( _best, gold_fact_trades[strategy] ) & " · " & FORMAT ( MAXX ( _best, [@w] ), "0%" ) & " win" & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( MAXX ( _best, [@n] ), "0" ) & " trades · " & FORMAT ( MAXX ( _best, [@r] ), "+0.00;-0.00", "en-US" ) & "R avg · most reliable" & "</span></span></div>"
+                & "</div>" 
 
     MEASURE gold_fact_trades[Panel - Cash HTML] =
         "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:26px 28px'>" & "<div style='font-size:56px;font-weight:800;letter-spacing:-.03em;color:#0F1712'>" & FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K" & "</div>" & "<div style='font-size:13px;font-weight:600;margin-top:2px'>" & "sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity" & "</div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused" & "</span></span></div>" & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & [Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure" & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized" & "</span></span></div>" & "</div>"
@@ -767,6 +777,110 @@ DEFINE
                 & "<circle cx='36' cy='1030' r='5' fill='#4ED15A'/>"
                 & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
                 & "</g></svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Rail The Edge] =
+        -- left navigation rail (page 2 active)
+        VAR _active = 2
+        VAR _item = "<g font-size='11' text-anchor='middle'>"
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='72' height='1080' fill='#0F1712'/>"
+                & "<rect x='14' y='24' width='44' height='44' rx='12' fill='#4ED15A'/>"
+                & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='#0F1712' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                & _item
+                & "<polyline points='26,140 32,132 38,136 46,126' fill='none' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='144' x2='46' y2='144' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='164' fill='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Book</text>"
+                & "<circle cx='36' cy='212' r='10' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<circle cx='36' cy='212' r='4' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='240' fill='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Edge</text>"
+                & "<rect x='26' y='278' width='20' height='16' rx='3' fill='none' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='285' x2='46' y2='285' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='314' fill='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Desk</text>"
+                & "<circle cx='36' cy='1030' r='5' fill='#4ED15A'/>"
+                & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
+                & "</g></svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Rail The Desk] =
+        -- left navigation rail (page 3 active)
+        VAR _active = 3
+        VAR _item = "<g font-size='11' text-anchor='middle'>"
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
+                & "<rect width='72' height='1080' fill='#0F1712'/>"
+                & "<rect x='14' y='24' width='44' height='44' rx='12' fill='#4ED15A'/>"
+                & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='#0F1712' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+                & _item
+                & "<polyline points='26,140 32,132 38,136 46,126' fill='none' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='144' x2='46' y2='144' stroke='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='164' fill='" & IF ( _active = 1, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Book</text>"
+                & "<circle cx='36' cy='212' r='10' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<circle cx='36' cy='212' r='4' fill='none' stroke='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='240' fill='" & IF ( _active = 2, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Edge</text>"
+                & "<rect x='26' y='278' width='20' height='16' rx='3' fill='none' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<line x1='26' y1='285' x2='46' y2='285' stroke='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "' stroke-width='2'/>"
+                & "<text x='36' y='314' fill='" & IF ( _active = 3, "#FFFFFF", "rgba(255,255,255,.5)" ) & "'>Desk</text>"
+                & "<circle cx='36' cy='1030' r='5' fill='#4ED15A'/>"
+                & "<text x='36' y='1054' font-size='9' font-weight='700' letter-spacing='1' fill='rgba(255,255,255,.6)'>PAPER</text>"
+                & "</g></svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Header The Edge] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+                & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='#0F1712'>The Edge</text>"
+                & "<text x='2' y='78' font-size='15' fill='#6A746C'>Where do the wins and losses come from? · R-multiples · exits · " & FORMAT ( [Strategies], "0" ) & " strategies</text>"
+                & "<rect x='1290' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
+                & "<circle cx='1314' cy='47' r='5' fill='#4ED15A'/><text x='1328' y='52' font-size='14' font-weight='600' fill='#0F1712'>Alpaca · Paper</text>"
+                & "<rect x='1472' y='26' width='150' height='42' rx='21' fill='#0F1712'/><text x='1490' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Last 10 weeks  ⌄</text>"
+                & "<rect x='1634' y='26' width='158' height='42' rx='21' fill='#0F1712'/><text x='1652' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All strategies  ⌄</text>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card Strategy Lollipop] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+                & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Tagged setups earn · untagged legacy bleeds" & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Net P&amp;L of the 4 best and 4 worst of " & FORMAT ( [Strategies], "0" ) & " strategies · dot size = number of trades" & "</text>"
+                & "<rect x='726' y='22' width='130' height='26' rx='13' fill='#EEF2EE'/><text x='791.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#6A746C'>" & "4 best · 4 worst" & "</text>"
+                & "<svg x='28' y='92' width='828' height='228'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Strategy Lollipop], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card R-Multiple Dots] =
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+                & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Every dot is a trade · losses pile up past the stop" & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Trades with a defined stop, grouped by R-multiple (net P&amp;L ÷ planned risk)" & "</text>"
+                & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#FDE7E4'/><text x='771.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#C2453A'>" & FORMAT ( [Lost Past -1R Trades], "0" ) & " slipped the stop" & "</text>"
+                & "<svg x='28' y='92' width='828' height='246'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - R-Multiple Dots], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "</svg>"
+        RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
+
+    MEASURE gold_fact_trades[SVG - Card Shorts vs Longs] =
+        -- dark card: short vs long scorecards + one tick per trade
+        VAR _sp = [Short P&L]  VAR _lp = [Long P&L]
+        VAR _svg =
+            "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+                & "<rect width='884' height='358' rx='22' fill='#0F1712'/>"
+                & "<text x='28' y='42' font-size='20' font-weight='700' fill='#FFFFFF'>" & IF ( _sp > _lp, "Shorts carry the book", "Longs carry the book" ) & "</text>"
+                & "<text x='28' y='64' font-size='12' fill='rgba(255,255,255,.6)'>Net P&amp;L and win rate by side</text>"
+                & "<rect x='776' y='22' width='80' height='26' rx='13' fill='#FFFFFF'/><text x='816' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#0F1712'>By side</text>"
+                & "<rect x='28' y='84' width='404' height='104' rx='16' fill='#1B2A20'/>"
+                & "<text x='48' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Short · " & FORMAT ( [Short Trades], "0" ) & "</text>"
+                & "<text x='48' y='152' font-size='34' font-weight='800' fill='" & IF ( _sp >= 0, "#4ED15A", "#E0574C" ) & "'>" & FORMAT ( _sp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+                & "<text x='48' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Short Win Rate], "0%" ) & " win</text>"
+                & "<rect x='452' y='84' width='404' height='104' rx='16' fill='#1B2A20'/>"
+                & "<text x='472' y='112' font-size='12' fill='rgba(255,255,255,.6)'>Long · " & FORMAT ( [Long Trades], "0" ) & "</text>"
+                & "<text x='472' y='152' font-size='34' font-weight='800' fill='" & IF ( _lp >= 0, "#4ED15A", "#E0574C" ) & "'>" & FORMAT ( _lp, "+$#,0;-$#,0", "en-US" ) & "</text>"
+                & "<text x='472' y='174' font-size='12' fill='rgba(255,255,255,.6)'>" & FORMAT ( [Long Win Rate], "0%" ) & " win</text>"
+                & "<svg x='28' y='206' width='828' height='104'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Long vs Short Units], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
+                & "<text x='28' y='338' font-size='11' fill='rgba(255,255,255,.55)'>" & FORMAT ( [Long Share of Trades], "0%" ) & " of trades are long — " & IF ( _lp < _sp, "the losing side", "the winning side" ) & "</text>"
+                & "</svg>"
         RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
 
 
