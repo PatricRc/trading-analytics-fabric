@@ -5,10 +5,10 @@
 
 VAR _svg =
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 340' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
-        & "<rect width='884' height='340' rx='22' fill='#FFFFFF'/>"
-        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Tagged setups earn · untagged legacy bleeds" & "</text>"
-        & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Net P&amp;L of the 4 best and 4 worst of " & FORMAT ( [Strategies], "0" ) & " strategies · dot size = number of trades" & "</text>"
-        & "<rect x='726' y='22' width='130' height='26' rx='13' fill='#EEF2EE'/><text x='791.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#6A746C'>" & "4 best · 4 worst" & "</text>"
+        & "<rect width='884' height='340' rx='20' fill='#FFFFFF' stroke='{HAIR}'/>"
+        & "<text x='28' y='44' font-family='Georgia,Cambria,Times New Roman,serif' font-size='23' font-weight='700' fill='#0F1712'>" & "Tagged setups earn · untagged legacy bleeds" & "</text>"
+        & "<text x='28' y='68' font-size='13' fill='#5E685F'>" & "Net P&amp;L of the 4 best and 4 worst of " & FORMAT ( [Strategies], "0" ) & " strategies · dot size = number of trades" & "</text>"
+        & "<rect x='726' y='22' width='130' height='26' rx='13' fill='#EEF2EE'/><text x='791.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#5E685F'>" & "4 best · 4 worst" & "</text>"
         & "<svg x='28' y='92' width='828' height='228'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Strategy Lollipop], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

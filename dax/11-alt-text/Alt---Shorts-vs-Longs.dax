@@ -1,0 +1,6 @@
+-- Measure: Alt - Shorts vs Longs
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Shorts " & FORMAT ( [Short P&L], "+$#,0;-$#,0", "en-US" ) & " on " & [Short Trades] & " trades, " & FORMAT ( [Short Win Rate], "0%" ) & " win; longs " & FORMAT ( [Long P&L], "+$#,0;-$#,0", "en-US" ) & " on " & [Long Trades] & " trades, " & FORMAT ( [Long Win Rate], "0%" ) & " win."

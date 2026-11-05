@@ -1,0 +1,6 @@
+-- Measure: Alt - Cover
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Cover: The Book of a Paper Trader. Account equity " & FORMAT ( [Account Equity], "$#,0", "en-US" ) & ", net closed P&L " & FORMAT ( [Net P&L], "+$#,0;-$#,0", "en-US" ) & ", profit factor " & FORMAT ( [Profit Factor], "0.00", "en-US" ) & "."

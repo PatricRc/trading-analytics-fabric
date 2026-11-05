@@ -10,7 +10,7 @@ VAR _rk = ADDCOLUMNS ( _p, "@i", RANKX ( _p, [@mv], , DESC, DENSE ) )
 VAR _x = ADDCOLUMNS ( _rk, "@x0", VAR i = [@i] RETURN SUMX ( FILTER ( _rk, [@i] < i ), [@mv] ) / _tot * 900 )
 VAR _tiles = CONCATENATEX ( _x,
     VAR w = [@mv] / _tot * 900
-    VAR c = IF ( [@r] >= 0.01, "#2E9E44", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#E0574C" ) ) )
+    VAR c = IF ( [@r] >= 0.01, "#23803A", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#C9402F" ) ) )
     VAR tc = IF ( ABS ( [@r] ) >= 0.01, "#fff", "#0F1712" )
     RETURN
         "<rect x='" & FORMAT ( [@x0] + 1, "0.0", "en-US" ) & "' y='0' width='" & FORMAT ( MAX ( w - 2, 1 ), "0.0", "en-US" ) & "' height='120' rx='6' fill='" & c & "'/>"

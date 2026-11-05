@@ -5,10 +5,10 @@
 
 VAR _svg =
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
-        & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
-        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>Where " & FORMAT ( [Orders], "#,0", "en-US" ) & " orders went</text>"
-        & "<text x='28' y='64' font-size='12' fill='#6A746C'>Order flow: all orders → side → outcome · band width = order count</text>"
-        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#E3F5E5'/><text x='771' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#2E9E44'>" & FORMAT ( [Cancel Rate], "0%" ) & " cancelled · expected</text>"
+        & "<rect width='884' height='358' rx='20' fill='#FFFFFF' stroke='#E3E8E3'/>"
+        & "<text x='28' y='44' font-family='Georgia,Cambria,Times New Roman,serif' font-size='23' font-weight='700' fill='#0F1712'>Where " & FORMAT ( [Orders], "#,0", "en-US" ) & " orders went</text>"
+        & "<text x='28' y='68' font-size='13' fill='#5E685F'>Order flow: all orders → side → outcome · band width = order count</text>"
+        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#E3F5E5'/><text x='771' y='39' font-size='12' font-weight='700' text-anchor='middle' fill='#23803A'>" & FORMAT ( [Cancel Rate], "0%" ) & " cancelled · expected</text>"
         & "<svg x='28' y='88' width='828' height='252'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - Order Flow Sankey], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

@@ -1,0 +1,6 @@
+-- Measure: Alt - Waterfall
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Waterfall: gross wins " & FORMAT ( [Gross Wins], "$#,0", "en-US" ) & ", stop exits " & FORMAT ( [Stop Exit P&L], "$#,0;-$#,0", "en-US" ) & ", other losses " & FORMAT ( [Other Losses], "$#,0;-$#,0", "en-US" ) & ", net " & FORMAT ( [Net P&L], "$#,0;-$#,0", "en-US" ) & "."

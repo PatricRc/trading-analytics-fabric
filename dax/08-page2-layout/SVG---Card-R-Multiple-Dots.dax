@@ -5,10 +5,10 @@
 
 VAR _svg =
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 884 358' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
-        & "<rect width='884' height='358' rx='22' fill='#FFFFFF'/>"
-        & "<text x='28' y='42' font-size='20' font-weight='700' fill='#0F1712'>" & "Every dot is a trade · losses pile up past the stop" & "</text>"
-        & "<text x='28' y='64' font-size='12' fill='#6A746C'>" & "Trades with a defined stop, grouped by R-multiple (net P&amp;L ÷ planned risk)" & "</text>"
-        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#FDE7E4'/><text x='771.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#C2453A'>" & FORMAT ( [Lost Past -1R Trades], "0" ) & " slipped the stop" & "</text>"
+        & "<rect width='884' height='358' rx='20' fill='#FFFFFF' stroke='{HAIR}'/>"
+        & "<text x='28' y='44' font-family='Georgia,Cambria,Times New Roman,serif' font-size='23' font-weight='700' fill='#0F1712'>" & "Every dot is a trade · losses pile up past the stop" & "</text>"
+        & "<text x='28' y='68' font-size='13' fill='#5E685F'>" & "Trades with a defined stop, grouped by R-multiple (net P&amp;L ÷ planned risk)" & "</text>"
+        & "<rect x='686' y='22' width='170' height='26' rx='13' fill='#FDE7E4'/><text x='771.0' y='39.0' font-size='12' font-weight='700' text-anchor='middle' fill='#C9402F'>" & FORMAT ( [Lost Past -1R Trades], "0" ) & " slipped the stop" & "</text>"
         & "<svg x='28' y='92' width='828' height='246'>" & SUBSTITUTE ( SUBSTITUTE ( MID ( [SVG - R-Multiple Dots], 25, 100000 ), "%23", "#" ), "%25", "%" ) & "</svg>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

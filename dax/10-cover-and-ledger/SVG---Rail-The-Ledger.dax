@@ -1,0 +1,17 @@
+-- Measure: SVG - Rail The Ledger
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 10-cover-and-ledger
+
+-- left navigation rail · active item = Ledger (green pill); a transparent vertical
+-- Page navigator (x 0, y 96, 72 x 380, 5 buttons of 76px) sits on top and does the actual navigation
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 72 1080' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<rect width='72' height='1080' fill='#0F1712'/>"
+        & "<rect x='14' y='24' width='44' height='44' rx='12' fill='#4ED15A'/>"
+        & "<polyline points='24,54 32,44 40,50 49,38' fill='none' stroke='#0F1712' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/>"
+        & "<path d='M26 126 L36 116 L46 126 V135 H26 Z' fill='none' stroke='rgba(255,255,255,.55)' stroke-width='2' stroke-linejoin='round'/><text x='36' y='156' font-size='11' font-weight='600' text-anchor='middle' fill='rgba(255,255,255,.62)'>Home</text><polyline points='26,196 32,208 38,200 46,192' fill='none' stroke='rgba(255,255,255,.55)' stroke-width='2' stroke-linecap='round'/><line x1='26' y1='210' x2='46' y2='210' stroke='rgba(255,255,255,.55)' stroke-width='2'/><text x='36' y='232' font-size='11' font-weight='600' text-anchor='middle' fill='rgba(255,255,255,.62)'>Book</text><circle cx='36' cy='278' r='10' fill='none' stroke='rgba(255,255,255,.55)' stroke-width='2'/><circle cx='36' cy='278' r='3.5' fill='rgba(255,255,255,.55)'/><text x='36' y='308' font-size='11' font-weight='600' text-anchor='middle' fill='rgba(255,255,255,.62)'>Edge</text><rect x='26' y='348' width='20' height='16' rx='3' fill='none' stroke='rgba(255,255,255,.55)' stroke-width='2'/><line x1='26' y1='360' x2='46' y2='360' stroke='rgba(255,255,255,.55)' stroke-width='2'/><text x='36' y='384' font-size='11' font-weight='600' text-anchor='middle' fill='rgba(255,255,255,.62)'>Desk</text><rect x='8' y='406' width='56' height='64' rx='14' fill='#4ED15A'/><line x1='26' y1='424' x2='46' y2='424' stroke='#0F1712' stroke-width='2'/><line x1='26' y1='430' x2='46' y2='430' stroke='#0F1712' stroke-width='2'/><line x1='26' y1='436' x2='40' y2='436' stroke='#0F1712' stroke-width='2'/><text x='36' y='460' font-size='11' font-weight='800' text-anchor='middle' fill='#0F1712'>Ledger</text>"
+        & "<circle cx='36' cy='1026' r='5' fill='#F2B33D'/>"
+        & "<text x='36' y='1052' font-size='10' font-weight='800' letter-spacing='1.5' text-anchor='middle' fill='#F2B33D'>PAPER</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

@@ -3,12 +3,12 @@
 -- Table: gold_fact_trades
 -- Display folder: 05-html-cards
 
-VAR _val = FORMAT ( [Won 1R+ P&L] / 1000, "+$0.0;-$0.0", "en-US" ) & "K"
+VAR _val = "<span style='font-size:22px;vertical-align:8px;margin-right:6px'>" & IF ( [Won 1R+ P&L] < 0, "▼", "▲" ) & "</span>" & FORMAT ( [Won 1R+ P&L] / 1000, "$0.0;$0.0", "en-US" ) & "K"
 VAR _sub = FORMAT ( [Won 1R+ Trades], "#,0" ) & " trades · the real edge"
-VAR _color = "#2E9E44"
+VAR _color = "#23803A"
 RETURN
-    "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;background:#FFFFFF;color:#0F1712'>"
-        & "<div style='font-size:14px;font-weight:600;color:#6A746C'>Won 1R or more</div>"
-        & "<div style='font-size:44px;font-weight:800;letter-spacing:-.02em;margin-top:14px;color:" & _color & "'>" & _val & "</div>"
-        & "<div style='font-size:13px;color:#6A746C;margin-top:8px'>" & _sub & "</div>"
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:20px;padding:20px 24px;height:156px;box-sizing:border-box;position:relative;overflow:hidden;font-variant-numeric:tabular-nums;background:#FFFFFF;color:#0F1712;border:1px solid #E3E8E3'>"
+        & "<div style='font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5E685F'>Won 1R or more</div>"
+        & "<div style='font-size:44px;font-weight:800;letter-spacing:-.025em;line-height:1;margin-top:18px;color:" & _color & "'>" & _val & "</div>"
+        & "<div style='font-size:13px;color:#5E685F;margin-top:12px'>" & _sub & "</div>"
         & "</div>" 

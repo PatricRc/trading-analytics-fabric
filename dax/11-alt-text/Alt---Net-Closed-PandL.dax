@@ -1,0 +1,6 @@
+-- Measure: Alt - Net Closed P&L
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Net closed P&L is " & FORMAT ( [Net P&L], "+$#,0;-$#,0", "en-US" ) & " across " & FORMAT ( [Trades], "#,0" ) & " trades."

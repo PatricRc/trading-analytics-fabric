@@ -6,19 +6,19 @@
 -- gross wins → stop exits → other losses → net (bars start from zero, per the style guide)
 VAR _gw = [Gross Wins]  VAR _st = [Stop Exit P&L]  VAR _ot = [Other Losses]  VAR _net = [Net P&L]
 VAR _min = MIN ( 0, _net )  VAR _max = _gw
-VAR _sc = 560 / ( _max - _min )
-VAR _z = 300 - _min * _sc
+VAR _sc = 600 / ( _max - _min )
+VAR _z = 150 - _min * _sc
 VAR _x1 = _z + _gw * _sc  VAR _x2 = _x1 + _st * _sc  VAR _x3 = _x2 + _ot * _sc
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='13'>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 150' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif' font-size='14'>"
         & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='136' stroke='#BFC8C0'/>"
-        & "<text x='0' y='19' fill='#0F1712'>Gross wins</text><rect x='" & FORMAT ( _z, "0.0", "en-US" ) & "' y='4' width='" & FORMAT ( ( _x1 - _z ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#2E9E44'/>"
-        & "<text x='900' y='19' text-anchor='end' font-weight='700' fill='#2E9E44'>" & FORMAT ( _gw, "+$#,0", "en-US" ) & "</text>"
-        & "<text x='0' y='53' fill='#0F1712'>Stop exits</text><rect x='" & FORMAT ( _x2, "0.0", "en-US" ) & "' y='38' width='" & FORMAT ( ( _x1 - _x2 ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#E0574C'/>"
-        & "<text x='900' y='53' text-anchor='end' font-weight='700' fill='#E0574C'>" & FORMAT ( _st, "$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='0' y='19' fill='#0F1712'>Gross wins</text><rect x='" & FORMAT ( _z, "0.0", "en-US" ) & "' y='4' width='" & FORMAT ( ( _x1 - _z ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#23803A'/>"
+        & "<text x='896' y='19' text-anchor='end' font-weight='700' fill='#23803A'>" & FORMAT ( _gw, "+$#,0", "en-US" ) & "</text>"
+        & "<text x='0' y='53' fill='#0F1712'>Stop exits</text><rect x='" & FORMAT ( _x2, "0.0", "en-US" ) & "' y='38' width='" & FORMAT ( ( _x1 - _x2 ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#C9402F'/>"
+        & "<text x='896' y='53' text-anchor='end' font-weight='700' fill='#C9402F'>" & FORMAT ( _st, "$#,0;-$#,0", "en-US" ) & "</text>"
         & "<text x='0' y='87' fill='#0F1712'>Other losses</text><rect x='" & FORMAT ( _x3, "0.0", "en-US" ) & "' y='72' width='" & FORMAT ( ( _x2 - _x3 ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#F2B5AE'/>"
-        & "<text x='900' y='87' text-anchor='end' font-weight='700' fill='#E0574C'>" & FORMAT ( _ot, "$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='896' y='87' text-anchor='end' font-weight='700' fill='#C9402F'>" & FORMAT ( _ot, "$#,0;-$#,0", "en-US" ) & "</text>"
         & "<text x='0' y='121' font-weight='700' fill='#0F1712'>Net P&amp;L</text><rect x='" & FORMAT ( MIN ( _z, _x3 ), "0.0", "en-US" ) & "' y='106' width='" & FORMAT ( ABS ( _z - _x3 ), "0.0", "en-US" ) & "' height='22' rx='6' fill='#0F1712'/>"
-        & "<text x='900' y='121' text-anchor='end' font-weight='700' fill='#0F1712'>" & FORMAT ( _net, "$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='896' y='121' text-anchor='end' font-weight='700' fill='#0F1712'>" & FORMAT ( _net, "$#,0;-$#,0", "en-US" ) & "</text>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

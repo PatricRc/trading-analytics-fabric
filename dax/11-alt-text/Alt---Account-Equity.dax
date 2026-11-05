@@ -1,0 +1,6 @@
+-- Measure: Alt - Account Equity
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Account equity is " & FORMAT ( [Account Equity], "$#,0", "en-US" ) & ", " & FORMAT ( [Day P&L], "+$#,0;-$#,0", "en-US" ) & " today."

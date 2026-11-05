@@ -3,26 +3,34 @@
 -- Table: gold_fact_trades
 -- Display folder: 06-svg-visuals
 
--- 4 best and 4 worst strategies, stem from $0, dot size = number of trades
-VAR _all = ADDCOLUMNS ( ALLSELECTED ( gold_fact_trades[strategy] ), "@v", [Net P&L], "@n", [Trades] )
+-- 4 best and 4 worst strategies · columns: name | trades | stem from $0 + value | win-rate chip
+VAR _all = ADDCOLUMNS ( ALLSELECTED ( gold_fact_trades[strategy] ), "@v", [Net P&L], "@n", [Trades], "@w", [Win Rate] )
 VAR _sel = UNION ( TOPN ( 4, _all, [@v], DESC ), TOPN ( 4, _all, [@v], ASC ) )
 VAR _rk = ADDCOLUMNS ( _sel, "@i", RANKX ( _sel, [@v], , DESC, DENSE ) )
 VAR _m = MAX ( MAXX ( _sel, ABS ( [@v] ) ), 1 )
 VAR _maxn = MAXX ( _sel, [@n] )
 VAR _z = 590
 VAR _rows = CONCATENATEX ( _rk,
-    VAR y = FORMAT ( 14 + ( [@i] - 1 ) * 24.5, "0.0", "en-US" )
-    VAR yt = FORMAT ( 18 + ( [@i] - 1 ) * 24.5, "0.0", "en-US" )
-    VAR x = _z + [@v] / _m * 320
-    VAR c = IF ( [@v] >= 0, "#2E9E44", "#E0574C" )
+    VAR y = FORMAT ( 30 + ( [@i] - 1 ) * 24.5, "0.0", "en-US" )
+    VAR yt = FORMAT ( 34.5 + ( [@i] - 1 ) * 24.5, "0.0", "en-US" )
+    VAR x = _z + [@v] / _m * 180
+    VAR c = IF ( [@v] >= 0, "#23803A", "#C9402F" )
+    VAR wc = IF ( [@w] >= 0.5, "#23803A", "#C9402F" )
     RETURN
-        "<text x='0' y='" & yt & "' font-family='Geist Mono,Consolas,Menlo,monospace' font-size='12' fill='#0F1712'>" & gold_fact_trades[strategy] & "</text>"
+        "<text x='0' y='" & yt & "' font-family='Cascadia Mono,Consolas,Menlo,monospace' font-size='13' fill='#0F1712'>" & gold_fact_trades[strategy] & "</text>"
+        & "<text x='300' y='" & yt & "' font-size='12' text-anchor='end' fill='#5E685F'>" & [@n] & "</text>"
         & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( x, "0.0", "en-US" ) & "' y1='" & y & "' y2='" & y & "' stroke='" & c & "' stroke-width='2'/>"
-        & "<circle cx='" & FORMAT ( x, "0.0", "en-US" ) & "' cy='" & y & "' r='" & FORMAT ( 5 + 7 * SQRT ( [@n] / _maxn ), "0.0", "en-US" ) & "' fill='" & c & "' stroke='#fff' stroke-width='1.5'/>"
-        & "<text x='" & FORMAT ( x + IF ( [@v] >= 0, 16, -16 ), "0.0", "en-US" ) & "' y='" & yt & "' font-size='12' font-weight='700' fill='" & c & "' text-anchor='" & IF ( [@v] >= 0, "start", "end" ) & "'>" & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</text>"
-        & "<text x='900' y='" & yt & "' font-size='11' fill='#6A746C' text-anchor='end'>" & [@n] & " trades</text>",
+        & "<circle cx='" & FORMAT ( x, "0.0", "en-US" ) & "' cy='" & y & "' r='" & FORMAT ( 4 + 5 * SQRT ( [@n] / _maxn ), "0.0", "en-US" ) & "' fill='" & c & "' stroke='#fff' stroke-width='1.5'/>"
+        & "<text x='" & FORMAT ( x + IF ( [@v] >= 0, 14, -14 ), "0.0", "en-US" ) & "' y='" & yt & "' font-size='13' font-weight='800' fill='" & c & "' text-anchor='" & IF ( [@v] >= 0, "start", "end" ) & "'>" & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<rect x='846' y='" & FORMAT ( 30 + ( [@i] - 1 ) * 24.5 - 9, "0.0", "en-US" ) & "' width='50' height='18' rx='9' fill='" & wc & "' fill-opacity='.12'/>"
+        & "<text x='871' y='" & yt & "' font-size='12' font-weight='700' text-anchor='middle' fill='" & wc & "'>" & FORMAT ( [@w], "0%" ) & "</text>",
     "", [@i], ASC )
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 214' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
-        & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='0' y2='200' stroke='#BFC8C0'/>" & _rows & "</svg>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 228' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='10' font-size='11' font-weight='700' letter-spacing='1' fill='#5E685F'>STRATEGY</text>"
+        & "<text x='300' y='10' font-size='11' font-weight='700' letter-spacing='1' text-anchor='end' fill='#5E685F'>TRADES</text>"
+        & "<text x='590' y='10' font-size='11' font-weight='700' letter-spacing='1' text-anchor='middle' fill='#5E685F'>NET P&amp;L</text>"
+        & "<text x='871' y='10' font-size='11' font-weight='700' letter-spacing='1' text-anchor='middle' fill='#5E685F'>WIN</text>"
+        & "<line x1='" & FORMAT ( _z, "0.0", "en-US" ) & "' x2='" & FORMAT ( _z, "0.0", "en-US" ) & "' y1='18' y2='222' stroke='#BFC8C0'/>"
+        & "<line x1='0' x2='900' y1='121.5' y2='121.5' stroke='#E3E8E3' stroke-dasharray='2 4'/>" & _rows & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

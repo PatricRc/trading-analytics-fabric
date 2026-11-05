@@ -1,0 +1,10 @@
+-- Measure: Strategy Status
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 10-cover-and-ledger
+
+-- Edge = profit factor >= 1.2 on 10+ trades · Cut = losing more than $500 with PF < 0.8 · otherwise Watch
+SWITCH ( TRUE (),
+    [Profit Factor] >= 1.2 && [Trades] >= 10, "Edge",
+    [Net P&L] < -500 && [Profit Factor] < 0.8, "Cut",
+    "Watch" )

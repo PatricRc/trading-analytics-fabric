@@ -12,13 +12,13 @@ VAR _cnt = ADDCOLUMNS ( _bins, "@n", VAR b = [@bin] RETURN COUNTROWS ( FILTER ( 
 VAR _cols = CONCATENATEX ( _cnt,
     VAR b = [@bin]  VAR n = [@n]
     VAR cx = 40 + ( b + 2.5 ) * 2 * 72
-    VAR c = IF ( b < 0, "#E0574C", IF ( b = 0, "#BFC8C0", "#2E9E44" ) )
+    VAR c = IF ( b < 0, "#C9402F", IF ( b = 0, "#BFC8C0", "#23803A" ) )
     VAR dots = CONCATENATEX ( GENERATESERIES ( 0, MAX ( 0, n - 1 ), 1 ),
         IF ( n > 0,
             "<circle cx='" & FORMAT ( cx - 15 + MOD ( [Value], 4 ) * 10, "0", "en-US" ) & "' cy='" & ( 180 - INT ( [Value] / 4 ) * 10 ) & "' r='4' fill='" & c & "'/>" ), "" )
     RETURN dots
-        & "<text x='" & cx & "' y='" & ( 168 - INT ( MAX ( n - 1, 0 ) / 4 ) * 10 - 10 ) & "' font-size='10' font-weight='700' text-anchor='middle' fill='#0F1712'>" & n & "</text>"
-        & "<text x='" & cx & "' y='202' font-size='10' text-anchor='middle' fill='#6A746C'>" & FORMAT ( b, "+0.0;-0.0;0", "en-US" ) & "R" & "</text>",
+        & "<text x='" & cx & "' y='" & ( 168 - INT ( MAX ( n - 1, 0 ) / 4 ) * 10 - 10 ) & "' font-size='12' font-weight='700' text-anchor='middle' fill='#0F1712'>" & n & "</text>"
+        & "<text x='" & cx & "' y='202' font-size='12' text-anchor='middle' fill='#5E685F'>" & FORMAT ( b, "+0.0;-0.0;0", "en-US" ) & "R" & "</text>",
     "", [@bin], ASC )
 VAR _svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 900 210' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<line x1='0' x2='900' y1='188' y2='188' stroke='#E3E8E3'/>" & _cols & "</svg>"

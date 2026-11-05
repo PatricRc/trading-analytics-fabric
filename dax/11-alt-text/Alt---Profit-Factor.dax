@@ -1,0 +1,6 @@
+-- Measure: Alt - Profit Factor
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Profit factor is " & FORMAT ( [Profit Factor], "0.00", "en-US" ) & "; break-even is 1.00. Crypto alone is " & FORMAT ( [Crypto Profit Factor], "0.00", "en-US" ) & "."

@@ -1,22 +1,150 @@
 {
-  "name": "Trading Analytics · Forest",
-  "dataColors": ["#2E9E44", "#E0574C", "#4ED15A", "#F2B5AE", "#0F1712", "#A9E5AE", "#6A746C", "#BFC8C0"],
-  "good": "#2E9E44", "bad": "#E0574C", "neutral": "#6A746C",
-  "maximum": "#2E9E44", "center": "#E3E8E3", "minimum": "#E0574C",
-  "background": "#FFFFFF", "foreground": "#0F1712", "tableAccent": "#2E9E44",
+  "name": "Trading Analytics · Forest (tokens)",
+  "dataColors": [
+    "#23803A",
+    "#C9402F",
+    "#4ED15A",
+    "#F2B5AE",
+    "#0F1712",
+    "#A9E5AE",
+    "#5E685F",
+    "#F2B33D"
+  ],
+  "good": "#23803A",
+  "bad": "#C9402F",
+  "neutral": "#5E685F",
+  "maximum": "#23803A",
+  "center": "#E3E8E3",
+  "minimum": "#C9402F",
+  "background": "#FFFFFF",
+  "foreground": "#0F1712",
+  "tableAccent": "#23803A",
   "textClasses": {
-    "title":  { "fontFace": "Segoe UI Semibold", "fontSize": 14, "color": "#0F1712" },
-    "header": { "fontFace": "Segoe UI Semibold", "fontSize": 12, "color": "#0F1712" },
-    "label":  { "fontFace": "Segoe UI", "fontSize": 10, "color": "#6A746C" },
-    "callout":{ "fontFace": "Segoe UI Bold", "fontSize": 28, "color": "#0F1712" }
+    "title": {
+      "fontFace": "Georgia",
+      "fontSize": 16,
+      "color": "#0F1712"
+    },
+    "header": {
+      "fontFace": "Segoe UI Semibold",
+      "fontSize": 12,
+      "color": "#0F1712"
+    },
+    "label": {
+      "fontFace": "Segoe UI",
+      "fontSize": 10,
+      "color": "#5E685F"
+    },
+    "callout": {
+      "fontFace": "Segoe UI Bold",
+      "fontSize": 32,
+      "color": "#0F1712"
+    }
   },
   "visualStyles": {
-    "*": { "*": {
-      "background": [{ "color": { "solid": { "color": "#FFFFFF" } }, "transparency": 0 }],
-      "border": [{ "show": false }],
-      "visualHeader": [{ "show": false }],
-      "dropShadow": [{ "show": false }]
-    } },
-    "page": { "*": { "background": [{ "color": { "solid": { "color": "#EEF2EE" } }, "transparency": 0 }] } }
+    "*": {
+      "*": {
+        "visualHeader": [
+          {
+            "show": false
+          }
+        ],
+        "border": [
+          {
+            "show": false
+          }
+        ],
+        "dropShadow": [
+          {
+            "show": false
+          }
+        ],
+        "visualTooltip": [
+          {
+            "background": {
+              "solid": {
+                "color": "#0F1712"
+              }
+            },
+            "titleFontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            },
+            "valueFontColor": {
+              "solid": {
+                "color": "#FFFFFF"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "page": {
+      "*": {
+        "background": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF2EE"
+              }
+            },
+            "transparency": 0
+          }
+        ],
+        "outspace": [
+          {
+            "color": {
+              "solid": {
+                "color": "#EEF2EE"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "pageNavigator": {
+      "*": {
+        "fill": [
+          {
+            "show": false
+          }
+        ],
+        "text": [
+          {
+            "show": false
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ]
+      }
+    },
+    "actionButton": {
+      "*": {
+        "fill": [
+          {
+            "show": false
+          }
+        ],
+        "outline": [
+          {
+            "show": false
+          }
+        ],
+        "text": [
+          {
+            "show": false
+          }
+        ],
+        "icon": [
+          {
+            "show": false
+          }
+        ]
+      }
+    }
   }
 }

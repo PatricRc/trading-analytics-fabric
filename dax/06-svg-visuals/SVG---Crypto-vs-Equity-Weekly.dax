@@ -17,9 +17,9 @@ VAR _le = CONCATENATEX ( _r, FORMAT ( 10 + ( [@i] - 1 ) / MAX ( 1, _n - 1 ) * 70
 VAR _svg =
     "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 820 160' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
         & "<polyline points='" & _lc & "' fill='none' stroke='#4ED15A' stroke-width='2.5'/>"
-        & "<polyline points='" & _le & "' fill='none' stroke='#E0574C' stroke-width='2.5'/>"
+        & "<polyline points='" & _le & "' fill='none' stroke='#C9402F' stroke-width='2.5'/>"
         & "<text x='720' y='20' font-size='13' font-weight='700' fill='#4ED15A'>Crypto " & FORMAT ( [Crypto P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
-        & "<text x='720' y='40' font-size='13' font-weight='700' fill='#E0574C'>Equity " & FORMAT ( [Equity P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='720' y='40' font-size='13' font-weight='700' fill='#C9402F'>Equity " & FORMAT ( [Equity P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
         & "<text x='720' y='60' font-size='13' font-weight='700' fill='#F2B5AE'>Options " & FORMAT ( [Options P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

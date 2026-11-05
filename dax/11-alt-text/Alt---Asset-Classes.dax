@@ -1,0 +1,6 @@
+-- Measure: Alt - Asset Classes
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Net P&L by asset class: crypto " & FORMAT ( [Crypto P&L], "+$#,0;-$#,0", "en-US" ) & ", equity " & FORMAT ( [Equity P&L], "+$#,0;-$#,0", "en-US" ) & ", options " & FORMAT ( [Options P&L], "+$#,0;-$#,0", "en-US" ) & "."

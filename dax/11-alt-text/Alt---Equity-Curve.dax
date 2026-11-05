@@ -1,0 +1,6 @@
+-- Measure: Alt - Equity Curve
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Line chart of cumulative closed P&L by day, ending at " & FORMAT ( [Net P&L], "$#,0;-$#,0", "en-US" ) & ", peak " & FORMAT ( [Peak P&L], "$#,0;-$#,0", "en-US" ) & ", low " & FORMAT ( [Low P&L], "$#,0;-$#,0", "en-US" ) & ", maximum drawdown " & FORMAT ( [Max Drawdown], "$#,0;-$#,0", "en-US" ) & "."

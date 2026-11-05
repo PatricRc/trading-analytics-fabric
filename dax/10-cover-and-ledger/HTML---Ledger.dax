@@ -1,0 +1,48 @@
+-- Measure: HTML - Ledger
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 10-cover-and-ledger
+
+-- explore page: one row per strategy inside its asset class, heat bar on net P&L, status pill
+VAR _maxAbs = MAXX ( ALLSELECTED ( gold_fact_trades[strategy] ), ABS ( [Net P&L] ) )
+VAR _th = "<th style='font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5E685F;text-align:right;padding:10px 12px;border-bottom:2px solid #0F1712'>"
+VAR _classes = ADDCOLUMNS ( VALUES ( gold_fact_trades[asset_class] ), "@v", [Net P&L] )
+VAR _body = CONCATENATEX ( _classes,
+    VAR _cls = gold_fact_trades[asset_class]
+    VAR _nice = SWITCH ( _cls, "crypto", "Crypto", "us_equity", "Equity", "us_option", "Options", _cls )
+    VAR _rows = ADDCOLUMNS ( CALCULATETABLE ( VALUES ( gold_fact_trades[strategy] ), gold_fact_trades[asset_class] = _cls ),
+        "@v", CALCULATE ( [Net P&L], gold_fact_trades[asset_class] = _cls ),
+        "@n", CALCULATE ( [Trades], gold_fact_trades[asset_class] = _cls ),
+        "@w", CALCULATE ( [Win Rate], gold_fact_trades[asset_class] = _cls ),
+        "@r", CALCULATE ( [Avg R], gold_fact_trades[asset_class] = _cls ),
+        "@pf", CALCULATE ( [Profit Factor], gold_fact_trades[asset_class] = _cls ),
+        "@s", CALCULATE ( [Strategy Status], gold_fact_trades[asset_class] = _cls ) )
+    RETURN
+        "<tr style='background:#EEF2EE'><td colspan='7' style='padding:12px;font-family:Georgia,Cambria,Times New Roman,serif;font-size:19px;font-weight:700'>" & _nice
+            & "<span style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;font-size:13px;font-weight:600;color:#5E685F;margin-left:12px'>" & FORMAT ( CALCULATE ( [Trades] ), "#,0" ) & " trades · "
+            & "<b style='color:" & IF ( [@v] < 0, "#C9402F", "#23803A" ) & "'>" & IF ( [@v] < 0, "▼ ", "▲ " ) & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</b></span></td></tr>"
+        & CONCATENATEX ( _rows,
+            VAR _c = IF ( [@v] < 0, "#C9402F", "#23803A" )
+            VAR _pill = SWITCH ( [@s], "Edge", "background:#E3F5E5;color:#23803A", "Cut", "background:#FBE3E0;color:#C9402F", "background:#FFF3DA;color:#8A5A00" )
+            RETURN "<tr>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;font-family:Cascadia Mono,Consolas,Menlo,monospace;font-size:14px'>" & gold_fact_trades[strategy] & "</td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:right'>" & FORMAT ( [@n], "#,0" ) & "</td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:right;white-space:nowrap'><span style='display:inline-block;vertical-align:middle;width:140px;height:10px;margin-right:12px;background:#E3E8E3;border-radius:5px;position:relative'>"
+                    & "<span style='position:absolute;top:0;bottom:0;right:0;border-radius:5px;background:" & _c & ";opacity:" & FORMAT ( 0.35 + 0.65 * DIVIDE ( ABS ( [@v] ), _maxAbs ), "0.00", "en-US" ) & ";width:" & FORMAT ( 100 * DIVIDE ( ABS ( [@v] ), _maxAbs ), "0", "en-US" ) & "%'></span></span>"
+                    & "<b style='color:" & _c & "'>" & FORMAT ( [@v], "+$#,0;-$#,0", "en-US" ) & "</b></td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:right;color:" & IF ( [@w] >= 0.5, "#23803A", "#0F1712" ) & "'>" & FORMAT ( [@w], "0%" ) & "</td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:right'>" & IF ( ISBLANK ( [@r] ), "–", FORMAT ( [@r], "+0.00;-0.00", "en-US" ) & "R" ) & "</td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:right'>" & IF ( ISBLANK ( [@pf] ), "–", FORMAT ( [@pf], "0.00", "en-US" ) ) & "</td>"
+                & "<td style='padding:7px 12px;border-bottom:1px solid #E3E8E3;text-align:center'><span style='" & _pill & ";border-radius:11px;padding:3px 12px;font-size:12px;font-weight:800;letter-spacing:.04em'>" & UPPER ( [@s] ) & "</span></td>"
+                & "</tr>",
+            "", [@v], DESC ),
+    "", [@v], DESC )
+RETURN
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums;background:#fff;border:1px solid #E3E8E3;border-radius:20px;height:900px;box-sizing:border-box;padding:20px 28px;overflow:auto;color:#0F1712;font-size:14px'>"
+        & "<div style='display:flex;justify-content:space-between;align-items:baseline'><div style='font-family:Georgia,Cambria,Times New Roman,serif;font-size:23px;font-weight:700'>Strategy ledger</div>"
+        & "<div style='font-size:13px;color:#5E685F'><b style='color:#23803A'>EDGE</b> PF ≥ 1.2 on 10+ trades · <b style='color:#8A5A00'>WATCH</b> everything else · <b style='color:#C9402F'>CUT</b> &lt; −$500 and PF &lt; 0.8</div></div>"
+        & "<table style='width:100%;border-collapse:collapse;margin-top:12px'><tr>"
+        & "<th style='font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5E685F;text-align:left;padding:10px 12px;border-bottom:2px solid #0F1712'>Strategy</th>"
+        & _th & "Trades</th>" & _th & "Net P&amp;L</th>" & _th & "Win</th>" & _th & "Avg R</th>" & _th & "PF</th>"
+        & "<th style='font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#5E685F;text-align:center;padding:10px 12px;border-bottom:2px solid #0F1712'>Status</th></tr>"
+        & _body & "</table></div>" 

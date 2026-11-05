@@ -1,0 +1,6 @@
+-- Measure: Alt - Ledger
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Table of " & FORMAT ( [Strategies], "0" ) & " strategies grouped by asset class with trades, net P&L, win rate, average R, profit factor and status."

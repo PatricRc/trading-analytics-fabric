@@ -1,0 +1,18 @@
+-- Measure: SVG - Header The Ledger
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 10-cover-and-ledger
+
+VAR _chip = FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " – " & FORMAT ( [Last Trade Date], "d mmm yyyy", "en-US" )
+VAR _cw = 28 + LEN ( _chip ) * 8.2
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='48' font-family='Georgia,Cambria,Times New Roman,serif' font-size='42' font-weight='700' letter-spacing='-.5' fill='#0F1712'>The Ledger</text>"
+        & "<text x='2' y='80' font-size='15' fill='#5E685F'>" & "Every strategy, grouped by asset class · sorted by net P&amp;L · status = Edge / Watch / Cut" & "</text>"
+        & "<rect x='" & FORMAT ( 1792 - _cw - 186, "0", "en-US" ) & "' y='26' width='174' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
+        & "<circle cx='" & FORMAT ( 1792 - _cw - 164, "0", "en-US" ) & "' cy='47' r='5' fill='#F2B33D'/>"
+        & "<text x='" & FORMAT ( 1792 - _cw - 150, "0", "en-US" ) & "' y='52' font-size='14' font-weight='700' fill='#0F1712'>Alpaca · Paper</text>"
+        & "<rect x='" & FORMAT ( 1792 - _cw, "0", "en-US" ) & "' y='26' width='" & FORMAT ( _cw, "0", "en-US" ) & "' height='42' rx='21' fill='#0F1712'/>"
+        & "<text x='" & FORMAT ( 1792 - _cw / 2, "0", "en-US" ) & "' y='52' font-size='14' font-weight='700' text-anchor='middle' fill='#FFFFFF'>" & _chip & "</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

@@ -1,0 +1,6 @@
+-- Measure: Alt - Win Rate
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 11-alt-text
+
+"Win rate is " & FORMAT ( [Win Rate], "0.0%" ) & ": " & [Wins] & " won and " & [Losses] & " lost."

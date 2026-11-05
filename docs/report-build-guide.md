@@ -135,3 +135,26 @@ Original slot plan:
 | Account Equity / Cash / Buying Power | $95,819 / $71,279 / $353,828 |
 | Unrealized P&L | +$211 |
 | Orders / Filled / Canceled / Expired / Working | 631 / 277 / 326 / 15 / 13 |
+
+## Page 0 · Cover (landing page)
+| Slot | x / y / w / h | Visual | Measure / action |
+|---|---|---|---|
+| Hero | 0 / 0 / 1920 / 1080 | Image (Select from data, Fit) | `SVG - Cover` |
+| Explore | 120 / 744 / 300 / 64 | Blank button (theme hides fill/text) | Page navigation → The Book |
+| LinkedIn | 440 / 744 / 170 / 64 | Blank button | Web URL → https://www.linkedin.com/in/patriciorioscanepa |
+| Portfolio | 626 / 744 / 170 / 64 | Blank button | Web URL → https://data-pat-ai.netlify.app/ |
+
+Right-click the tab → **Set as landing page**, then **Move to → Move to front**.
+
+## Page 4 · The Ledger
+| Slot | x / y / w / h | Visual | Measure |
+|---|---|---|---|
+| Rail | 0 / 0 / 72 / 1080 | Image | `SVG - Rail The Ledger` |
+| Header | 96 / 24 / 1792 / 96 | Image | `SVG - Header The Ledger` |
+| Ledger | 96 / 140 / 1792 / 904 | HTML Content (padding 0, background off, title off) | `HTML - Ledger` |
+
+## Rail navigation (every content page)
+Insert → Buttons → Navigator → **Page navigator** at x 0, y 96, 72 × 380. Set Grid layout → Orientation **Vertical**, Padding **0**. The theme turns off its fill, text and outline, so it is an invisible hit area over the 5 rail items (Home · Book · Edge · Desk · Ledger, 76px each). The pages must stay in this order: Cover, The Book, The Edge, The Desk, The Ledger.
+
+## Alt text
+Each `Alt - *` measure (folder `11-alt-text`) is a one-sentence description. Bind it in Format → General → Alt text → fx → Field value.

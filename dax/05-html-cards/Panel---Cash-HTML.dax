@@ -7,17 +7,17 @@ VAR _eq = [Account Equity]
 VAR _pos = ADDCOLUMNS ( VALUES ( gold_fact_positions[symbol] ), "@mv", [Position Market Value], "@r", [Position Return %] )
 VAR _strip = CONCATENATEX ( _pos,
     "<span title='" & gold_fact_positions[symbol] & "' style='display:inline-block;height:12px;width:" & FORMAT ( DIVIDE ( [@mv], _eq ) * 100, "0.00", "en-US" ) & "%;background:"
-        & IF ( [@r] >= 0.01, "#2E9E44", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#E0574C" ) ) ) & "'></span>",
+        & IF ( [@r] >= 0.01, "#23803A", IF ( [@r] >= 0, "#A9E5AE", IF ( [@r] > -0.01, "#F2B5AE", "#C9402F" ) ) ) & "'></span>",
     "", [@mv], DESC )
 VAR _names = CONCATENATEX ( _pos, gold_fact_positions[symbol], " · ", [@mv], DESC )
 RETURN
-    "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:18px;padding:18px 22px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;background:#E3F5E5;color:#0F1712;padding:24px 28px'>"
+    "<div style='font-family:Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif;border-radius:20px;padding:20px 24px;height:322px;box-sizing:border-box;position:relative;overflow:hidden;font-variant-numeric:tabular-nums;background:#E3F5E5;color:#0F1712;padding:24px 28px'>"
         & "<div style='display:flex;justify-content:space-between;align-items:flex-start'><div>"
         & "<div style='font-size:52px;font-weight:800;letter-spacing:-.03em'>" & FORMAT ( [Cash] / 1000, "$0.0", "en-US" ) & "K</div>"
-        & "<div style='font-size:13px;font-weight:600;margin-top:2px'><span style='color:#2E9E44'>&#9675;</span> sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity</div></div>"
+        & "<div style='font-size:13px;font-weight:600;margin-top:2px'><span style='color:#23803A'>&#9675;</span> sitting in cash · " & FORMAT ( [Cash %], "0%" ) & " of equity</div></div>"
         & "<img style='width:92px;height:92px' src=""" & [SVG - Cash Donut] & """/></div>"
         & "<div style='margin-top:18px;height:12px;border-radius:6px;overflow:hidden;background:#E3E8E3;white-space:nowrap;font-size:0'>" & _strip & "</div>"
-        & "<div style='display:flex;justify-content:space-between;font-size:10px;color:#6A746C;margin-top:5px'><span>" & _names & "</span><span>Cash " & FORMAT ( [Cash %], "0%" ) & "</span></div>"
-        & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & "Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" ) & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused" & "</span></span></div>"
-        & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#2E9E44'>&#9679;</span><span><b style='font-size:17px'>" & [Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure" & "</b><br><span style='font-size:11px;color:#6A746C'>" & FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized" & "</span></span></div>"
+        & "<div style='display:flex;justify-content:space-between;font-size:12px;color:#5E685F;margin-top:5px'><span>" & _names & "</span><span>Cash " & FORMAT ( [Cash %], "0%" ) & "</span></div>"
+        & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#23803A'>&#9679;</span><span><b style='font-size:17px'>" & "Buying power " & FORMAT ( [Buying Power], "$#,0", "en-US" ) & "</b><br><span style='font-size:12px;color:#5E685F'>" & FORMAT ( [Buying Power x Equity], "0.0", "en-US" ) & "× equity · margin unused" & "</span></span></div>"
+        & "<div style='display:flex;gap:12px;align-items:center;margin-top:14px'><span style='width:30px;height:30px;border-radius:15px;background:rgba(46,158,68,.15);display:grid;place-items:center;color:#23803A'>&#9679;</span><span><b style='font-size:17px'>" & [Top Position Symbol] & " is " & FORMAT ( [Top Position Share], "0%" ) & " of exposure" & "</b><br><span style='font-size:12px;color:#5E685F'>" & FORMAT ( [Top Position Unrealized], "+$#,0;-$#,0", "en-US" ) & " unrealized" & "</span></span></div>"
         & "</div>" 

@@ -1,0 +1,64 @@
+-- Measure: SVG - Cover
+-- Report: Trading Analytics (The Book · The Edge · The Desk)
+-- Table: gold_fact_trades
+-- Display folder: 10-cover-and-ledger
+
+-- page 0 (1920 x 1080): title, three headline numbers, how-to-read strip and a hero drawn from the
+-- real daily equity path (one candle per trading day: open = previous cumulative P&L, close = today's)
+VAR _t = ADDCOLUMNS ( FILTER ( ALLSELECTED ( gold_dim_date[Date] ), NOT ISBLANK ( [Net P&L] ) ), "@cum", [Cumulative P&L], "@day", [Net P&L] )
+VAR _n = COUNTROWS ( _t )
+VAR _hi = MAXX ( _t, MAX ( [@cum], [@cum] - [@day] ) )  VAR _lo = MINX ( _t, MIN ( [@cum], [@cum] - [@day] ) )
+VAR _r = ADDCOLUMNS ( _t, "@i", RANKX ( _t, gold_dim_date[Date], , ASC ) )
+VAR _cw = 860 / _n
+VAR _candles = CONCATENATEX ( _r,
+    VAR x = 1000 + ( [@i] - 1 ) * _cw
+    VAR o = 200 + ( _hi - ( [@cum] - [@day] ) ) / ( _hi - _lo ) * 420
+    VAR c = 200 + ( _hi - [@cum] ) / ( _hi - _lo ) * 420
+    VAR k = IF ( [@day] >= 0, "#4ED15A", "#C9402F" )
+    RETURN "<line x1='" & FORMAT ( x + _cw / 2, "0.0", "en-US" ) & "' x2='" & FORMAT ( x + _cw / 2, "0.0", "en-US" ) & "' y1='" & FORMAT ( MIN ( o, c ) - 8, "0.0", "en-US" ) & "' y2='" & FORMAT ( MAX ( o, c ) + 8, "0.0", "en-US" ) & "' stroke='" & k & "' stroke-opacity='.45'/>"
+        & "<rect x='" & FORMAT ( x + 2, "0.0", "en-US" ) & "' y='" & FORMAT ( MIN ( o, c ), "0.0", "en-US" ) & "' width='" & FORMAT ( MAX ( _cw - 4, 2 ), "0.0", "en-US" ) & "' height='" & FORMAT ( MAX ( ABS ( c - o ), 2 ), "0.0", "en-US" ) & "' rx='2' fill='" & k & "' fill-opacity='.8'/>",
+    "", [@i], ASC )
+VAR _z = 200 + _hi / ( _hi - _lo ) * 420
+VAR _svg =
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<defs><radialGradient id='g' cx='75%' cy='35%' r='70%'><stop offset='0' stop-color='#1B2A20'/><stop offset='1' stop-color='#0F1712'/></radialGradient>"
+        & "<pattern id='p' width='24' height='24' patternUnits='userSpaceOnUse'><path d='M24 0 H0 V24' fill='none' stroke='#fff' stroke-opacity='.035'/></pattern></defs>"
+        & "<rect width='1920' height='1080' fill='url(#g)'/><rect width='1920' height='1080' fill='url(#p)'/>"
+        & "<line x1='1000' x2='1860' y1='" & FORMAT ( _z, "0.0", "en-US" ) & "' y2='" & FORMAT ( _z, "0.0", "en-US" ) & "' stroke='#fff' stroke-opacity='.25' stroke-dasharray='3 6'/>"
+        & "<text x='1860' y='" & FORMAT ( _z - 10, "0.0", "en-US" ) & "' font-size='14' text-anchor='end' fill='#fff' fill-opacity='.5'>$0 · start of book</text>"
+        & _candles
+        & "<text x='1000' y='680' font-size='14' fill='#fff' fill-opacity='.5'>One candle per trading day · cumulative closed P&amp;L · " & FORMAT ( _n, "0" ) & " days</text>"
+        & "<rect x='120' y='96' width='52' height='52' rx='14' fill='#4ED15A'/>"
+        & "<polyline points='132,132 142,120 151,127 162,113' fill='none' stroke='#0F1712' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'/>"
+        & "<text x='188' y='131' font-size='22' font-weight='800' fill='#fff'>DataPat<tspan fill='#4ED15A'>.ai</tspan></text>"
+        & "<text x='120' y='300' font-size='15' font-weight='800' letter-spacing='3' fill='#F2B33D'>ALPACA · PAPER ACCOUNT · " & UPPER ( FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " – " & FORMAT ( [Last Trade Date], "d mmm yyyy", "en-US" ) ) & "</text>"
+        & "<text x='116' y='392' font-family='Georgia,Cambria,Times New Roman,serif' font-size='88' font-weight='700' fill='#fff'>The Book of a</text>"
+        & "<text x='116' y='488' font-family='Georgia,Cambria,Times New Roman,serif' font-size='88' font-weight='700' font-style='italic' fill='#4ED15A'>Paper Trader</text>"
+        & "<text x='120' y='548' font-size='22' fill='#fff' fill-opacity='.72'>" & FORMAT ( [Trades], "#,0" ) & " closed trades, " & FORMAT ( [Strategies], "0" ) & " strategies and one honest question: is there an edge?</text>"
+        & "<g fill='#fff'>"
+        & "<text x='120' y='628' font-size='13' font-weight='800' letter-spacing='2' fill-opacity='.55'>ACCOUNT EQUITY</text>"
+        & "<text x='120' y='692' font-size='60' font-weight='800' letter-spacing='-1'>" & FORMAT ( [Account Equity], "$#,0", "en-US" ) & "</text>"
+        & "<text x='420' y='628' font-size='13' font-weight='800' letter-spacing='2' fill-opacity='.55'>NET CLOSED P&amp;L</text>"
+        & "<text x='420' y='692' font-size='60' font-weight='800' letter-spacing='-1' fill='" & IF ( [Net P&L] < 0, "#FF7A6E", "#4ED15A" ) & "'>" & FORMAT ( [Net P&L], "+$#,0;-$#,0", "en-US" ) & "</text>"
+        & "<text x='700' y='628' font-size='13' font-weight='800' letter-spacing='2' fill-opacity='.55'>PROFIT FACTOR</text>"
+        & "<text x='700' y='692' font-size='60' font-weight='800' letter-spacing='-1'>" & FORMAT ( [Profit Factor], "0.00", "en-US" ) & "</text></g>"
+        & "<rect x='120' y='744' width='300' height='64' rx='32' fill='#4ED15A'/>"
+        & "<text x='270' y='784' font-size='20' font-weight='800' text-anchor='middle' fill='#0F1712'>Explore the book  →</text>"
+        & "<rect x='440' y='744' width='170' height='64' rx='32' fill='none' stroke='#fff' stroke-opacity='.4'/>"
+        & "<text x='525' y='784' font-size='18' font-weight='700' text-anchor='middle' fill='#fff'>LinkedIn ↗</text>"
+        & "<rect x='626' y='744' width='170' height='64' rx='32' fill='none' stroke='#fff' stroke-opacity='.4'/>"
+        & "<text x='711' y='784' font-size='18' font-weight='700' text-anchor='middle' fill='#fff'>Portfolio ↗</text>"
+        & "<line x1='120' x2='1800' y1='880' y2='880' stroke='#fff' stroke-opacity='.15'/>"
+        & "<text x='120' y='920' font-size='13' font-weight='800' letter-spacing='2' fill='#F2B33D'>HOW TO READ</text>"
+        & "<text x='120' y='962' font-size='18' font-weight='800' fill='#fff'>R-multiple</text>"
+        & "<text x='120' y='992' font-size='16' fill='#fff' fill-opacity='.68'>Net P&amp;L ÷ planned risk. +1R = won what you risked;</text>"
+        & "<text x='120' y='1016' font-size='16' fill='#fff' fill-opacity='.68'>past −1R = the stop slipped.</text>"
+        & "<text x='700' y='962' font-size='18' font-weight='800' fill='#fff'>Profit factor</text>"
+        & "<text x='700' y='992' font-size='16' fill='#fff' fill-opacity='.68'>Gross wins ÷ gross losses. Above 1.00 makes money,</text>"
+        & "<text x='700' y='1016' font-size='16' fill='#fff' fill-opacity='.68'>below 1.00 loses it.</text>"
+        & "<text x='1280' y='962' font-size='18' font-weight='800' fill='#F2B33D'>Why “PAPER” matters</text>"
+        & "<text x='1280' y='992' font-size='16' fill='#fff' fill-opacity='.68'>Simulated fills on Alpaca’s paper account: no real</text>"
+        & "<text x='1280' y='1016' font-size='16' fill='#fff' fill-opacity='.68'>capital, no slippage cost. Treat results as a rehearsal.</text>"
+        & "<text x='1800' y='131' font-size='15' text-anchor='end' fill='#fff' fill-opacity='.6'>Patricio Rios · Microsoft Fabric + Power BI</text>"
+        & "</svg>"
+RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #

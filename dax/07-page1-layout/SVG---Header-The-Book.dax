@@ -3,13 +3,16 @@
 -- Table: gold_fact_trades
 -- Display folder: 07-page1-layout
 
+VAR _chip = FORMAT ( [First Trade Date], "d mmm", "en-US" ) & " – " & FORMAT ( [Last Trade Date], "d mmm yyyy", "en-US" )
+VAR _cw = 28 + LEN ( _chip ) * 8.2
 VAR _svg =
-    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,sans-serif'>"
-        & "<text x='0' y='46' font-size='38' font-weight='800' letter-spacing='-1' fill='#0F1712'>The Book</text>"
-        & "<text x='2' y='78' font-size='15' fill='#6A746C'>" & [Subtitle - The Book] & "</text>"
-        & "<rect x='1320' y='26' width='170' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
-        & "<circle cx='1344' cy='47' r='5' fill='#4ED15A'/><text x='1358' y='52' font-size='14' font-weight='600' fill='#0F1712'>Alpaca · Paper</text>"
-        & "<rect x='1502' y='26' width='150' height='42' rx='21' fill='#0F1712'/><text x='1520' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>Last 10 weeks  ⌄</text>"
-        & "<rect x='1664' y='26' width='128' height='42' rx='21' fill='#0F1712'/><text x='1682' y='52' font-size='14' font-weight='600' fill='#FFFFFF'>All assets  ⌄</text>"
+    "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1792 96' font-family='Plus Jakarta Sans,Segoe UI,Helvetica,Arial,sans-serif'>"
+        & "<text x='0' y='48' font-family='Georgia,Cambria,Times New Roman,serif' font-size='42' font-weight='700' letter-spacing='-.5' fill='#0F1712'>The Book</text>"
+        & "<text x='2' y='80' font-size='15' fill='#5E685F'>" & [Subtitle - The Book] & "</text>"
+        & "<rect x='" & FORMAT ( 1792 - _cw - 186, "0", "en-US" ) & "' y='26' width='174' height='42' rx='21' fill='#FFFFFF' stroke='#E3E8E3'/>"
+        & "<circle cx='" & FORMAT ( 1792 - _cw - 164, "0", "en-US" ) & "' cy='47' r='5' fill='#F2B33D'/>"
+        & "<text x='" & FORMAT ( 1792 - _cw - 150, "0", "en-US" ) & "' y='52' font-size='14' font-weight='700' fill='#0F1712'>Alpaca · Paper</text>"
+        & "<rect x='" & FORMAT ( 1792 - _cw, "0", "en-US" ) & "' y='26' width='" & FORMAT ( _cw, "0", "en-US" ) & "' height='42' rx='21' fill='#0F1712'/>"
+        & "<text x='" & FORMAT ( 1792 - _cw / 2, "0", "en-US" ) & "' y='52' font-size='14' font-weight='700' text-anchor='middle' fill='#FFFFFF'>" & _chip & "</text>"
         & "</svg>"
 RETURN "data:image/svg+xml;utf8," & SUBSTITUTE ( SUBSTITUTE ( _svg, "%", "%25" ), "#", "%23" )  -- URI-encode % first, then #
